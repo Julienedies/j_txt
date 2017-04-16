@@ -1,6 +1,6 @@
 {
   "name": "jtxt",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "txt文本处理工具.",
   "repository": {
     "type": "git",
@@ -12,7 +12,9 @@
     "preInstall": ""
   },
   "bin": {
-    "jtxt": "bin/cli"
+    "jtxt": "index.js",
+    "jtxt_merge": "bin/merge.js",
+    "jtxt_down": "bin/down.js"
   },
   "preferGlobal": "true",
   "bugs": {
@@ -23,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0",
-    "request": "^2.69.0"
+    "request": "^2.81.0"
   },
   "devDependencies": {}
 }

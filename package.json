@@ -1,0 +1,29 @@
+{
+  "name": "J_txt",
+  "version": "1.0",
+  "description": "txt文本处理工具.",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Julienedies/J_txt.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "init": "npm i request --save",
+    "preInstall": ""
+  },
+  "bin": {
+    "jtxt": "bin/txt"
+  },
+  "preferGlobal": "true",
+  "bugs": {
+    "url": "https://github.com/Julienedies/J_txt/issues"
+  },
+  "homepage": "https://github.com/Julienedies/J_txt#readme",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "request": "^2.69.0"
+  },
+  "devDependencies": {}
+}

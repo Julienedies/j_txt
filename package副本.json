@@ -1,10 +1,10 @@
 {
   "name": "jtxt",
-  "version": "1.1.0",
+  "version": "1.0",
   "description": "txt文本处理工具.",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Julienedies/j_txt.git"
+    "url": "git+ssh://git@github.com/Julienedies/J_txt.git"
   },
   "main": "index.js",
   "scripts": {
@@ -12,13 +12,13 @@
     "preInstall": ""
   },
   "bin": {
-    "jtxt": "bin/cli"
+    "jtxt": "bin/merge"
   },
   "preferGlobal": "true",
   "bugs": {
-    "url": "https://github.com/Julienedies/j_txt/issues"
+    "url": "https://github.com/Julienedies/J_txt/issues"
   },
-  "homepage": "https://github.com/Julienedies/j_txt#readme",
+  "homepage": "https://github.com/Julienedies/J_txt#readme",
   "author": "",
   "license": "ISC",
   "dependencies": {

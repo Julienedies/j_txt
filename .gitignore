@@ -11,6 +11,10 @@ Thumbs.db
 bower_components/
 node_modules/
 
+#临时测试下载
+test/
+down/
+
 #其它
 *.log
 

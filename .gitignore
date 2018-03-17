@@ -13,6 +13,7 @@ node_modules/
 
 #临时测试下载
 test/
+temp/
 down/
 
 #其它

@@ -13,6 +13,7 @@
   },
   "bin": {
     "jtxt": "index.js",
+    "jcsv2json": "bin/csv2json.js",
     "jtxt_merge": "bin/merge.js",
     "jtxt_down": "bin/down.js"
   },

@@ -16,7 +16,6 @@ function trim(str) {
 
 //最新动态
 function p1($) {
-    var s = '&';
     var $table = $('#profile table');
     var $td = $table.eq(0).find('td');
     return {
@@ -24,12 +23,10 @@ function p1($) {
         finance: $td.eq(3).text().replace('财务分析：', '财务：'),
         type: $table.eq(1).find('td').eq(3).text().replace('分类：', '')
     };
-    //return (finance ? [finance, type, concept] : [type, concept]).map(trim);
 }
 
 //公司资料
 function p2($) {
-    var s = '&';
     var $td = $('#detail td');
     return {
         full_name: $td.eq(1).text().replace('公司名称：', ''),
@@ -38,13 +35,7 @@ function p2($) {
         industry: $td.eq(7).text().replace('主营业务：', '业务：'),
         product: $td.eq(8).text().replace('产品名称：', '产品：')
     };
-
-    //return [position, business, industry].map(trim);
 }
-
-/*client.fetch('http://basic.10jqka.com.cn/300693/', { }, function (err, $, res, body) {
- console.log(p1($));
- });*/
 
 function main(stock_json_file, writed_file) {
 

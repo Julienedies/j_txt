@@ -43,7 +43,7 @@ function main(stock_json_file, writed_file) {
     var list = JSON.parse(str);
 
     if (!writed_file) {
-        writed_file = stock_json_file.split('.').shift() + '.txt';
+        writed_file = stock_json_file.split('.').shift() + '.TXT';
     }
 
     //清空要写入文件之前的内容

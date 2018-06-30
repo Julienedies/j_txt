@@ -16,17 +16,20 @@ const program = require('commander');
 
 program
     .version('1.0', '-v, --version')
-    .usage('jhandy <sub-command>');
+    .usage('<sub-command>');
 
 program
     .command('csv2json')
     .description('csv文件转为json文件')
     .option('-s, --source <csv_file>', "csv文件")
     .option('-d, --dist [json_file]', 'json文件')
-    .action(function (options) {
+    .action(function (cmd) {
         var f = require('./libs/csv2json.js');
-        var s = options.source;
-        var d = options.dist;
+        var s = cmd.source;
+        var d = cmd.dist;
+        if(!s){
+            return cmd.help();
+        }
         if (!d) {
             if (s == 's.txt') {
                 f(s, '/Users/j/dev/jHandy/stocks.json');
@@ -55,3 +58,7 @@ program
 
 
 program.parse(process.argv);
+
+if(!program.args.length) {
+    program.help();
+}

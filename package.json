@@ -12,10 +12,7 @@
     "preInstall": ""
   },
   "bin": {
-    "jtxt": "index.js",
-    "jcsv2json": "bin/csv2json.js",
-    "jtxt_merge": "bin/merge.js",
-    "jtxt_down": "bin/down.js"
+    "jhandy": "index.js"
   },
   "preferGlobal": "true",
   "bugs": {
@@ -26,7 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "commander": "^2.9.0",
+    "commander": "^2.16.0",
     "iconv-lite": "^0.4.19",
     "jsdom": "^11.6.2",
     "request": "^2.81.0"

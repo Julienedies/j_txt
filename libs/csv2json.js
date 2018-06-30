@@ -17,51 +17,45 @@ module.exports = function (csv_file, json_file, cols) {
     } else if (typeof json_file == 'object' && json_file.shift) {
         cols = json_file;
         json_file = csv_file.split('.').shift() + '.json';
-    } else if(typeof json_file == 'string'){
+    } else if (typeof json_file == 'string') {
         cols = cols || [0, 1];
     }
 
     fs.readFile(csv_file, function (err, data) {
-        if (err) {
-            return console.error(err);
-        }
-        //data = data.toString();
+        if (err) return console.erroror(err);
+        // 字符转码
         data = iconv.decode(data, 'GBK');
+        // 获取行并删除冗余行
         var rows = data.split('\r\n');
         rows.shift();
         rows.pop();
         rows.pop();
-        //console.log(rows[0]) ;
-        //console.log(rows[rows.length-2]);
-        //return;
+        // 截取对应的列，默认全列
         var rows2 = [];
         rows.forEach(function (row) {
             var arr = row.split(/[\t]+/);
             if (cols.length == 0) {
                 rows2.push(arr);
             } else {
-                rows2.push(arr.filter(function (x, i) {
+                rows2.push(arr.filter(function (v, i) {
                     return cols.indexOf(i) >= 0;
                 }));
             }
         });
 
+        console.log(rows2.length);
 
         var json_str = JSON.stringify(rows2);
+        // 如果写入js文件而不是json文件
+        if (json_file.match(/\.js$/)) {
+            json_str = 'STOCKS = ' + json_str + ';'
+        }
 
-        //解析后的数据写入新文件
+        // 解析后的数据写入新文件
         fs.open(json_file, 'w', function (err, fd) {
-            if (err) {
-                return console.err(err);
-            }
-            // 如果写入js文件而不是json文件
-            if(json_file.match(/\.js$/)){
-                json_str = 'STOCKS = ' + json_str + ';'
-            }
+            if (err) return console.error(err);
             fs.write(fd, json_str, function (err) {
-                if (err) {
-                    return console.err(err);
-                }
+                if (err) return console.error(err);
                 fs.close(fd);
             });
         });

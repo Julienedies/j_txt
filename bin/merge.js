@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-var merge = require('../lib/merge.js');
+var merge = require('../libs/merge.js');
 
 merge();
 

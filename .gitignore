@@ -16,6 +16,9 @@ test/
 temp/
 down/
 
+test.js
+ls.js
+
 #其它
 *.log
 

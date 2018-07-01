@@ -1,7 +1,7 @@
 {
   "name": "jtxt",
   "version": "1.1.2",
-  "description": "txt文本处理工具.",
+  "description": "命令行文本处理工具.",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Julienedies/j_txt.git"

@@ -6,17 +6,10 @@
 
 const program = require('commander');
 
-/*program
- .version('1.0')
- .usage('jtxt [options]')
- .option('-m, --merge <path>', '合并目录里的txt文件')
- .option('-d, --down <url>', '根据url下载html里的链接并存为txt文件')
- .option('-c, --clean <reg>', '根据规则对文本进行清理')
- .parse(process.argv);*/
-
 program
     .version('1.0', '-v, --version')
     .usage('<sub-command>');
+
 
 program
     .command('csv2json')
@@ -28,7 +21,7 @@ program
         var s = cmd.source;
         var d = cmd.dist;
         if(!s){
-            return cmd.help();
+            return cmd.help ? cmd.help() : console.log(cmd);
         }
         if (!d) {
             if (s == 's.txt') {
@@ -51,13 +44,14 @@ program
     .command('merge')
     .description('合并当前目录序列文本文件到一个文件')
     .option('-p, --place [p]', "目前无选项，占位符")
-    .action(function(options){
+    .action(function(cmd){
         var f = require('./libs/merge.js');
         f();
     });
 
 
 program.parse(process.argv);
+
 
 if(!program.args.length) {
     program.help();

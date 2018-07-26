@@ -43,7 +43,7 @@ module.exports = function (csv_file, json_file, cols) {
             }
         });
 
-        console.log(rows2.length);
+        console.log('rows is ',rows2.length);
 
         var json_str = JSON.stringify(rows2);
         // 如果写入js文件而不是json文件

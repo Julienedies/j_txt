@@ -25,15 +25,12 @@ program
         }
         if (!d) {
             if (s == 's.txt') {
-                f(s, '/Users/j/dev/jhandy/stocks.json');
-                console.log(`${s} ok!`);
-                return;
+                return f(s, '/Users/j/dev/jhandy/stocks.json');
             }
             if (s == 't.txt') {
-                f(s, '/Users/j/dev/crx-jhandy/js/data/T.js');
-                console.log(`${s} ok!`);
-                return;
+                return f(s, '/Users/j/dev/crx-jhandy/js/data/T.js');
             }
+            return f(s, s.replace(/\.\w+$/,'.json'));
         }
 
         f(s, d);

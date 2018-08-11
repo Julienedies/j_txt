@@ -24,13 +24,13 @@ program
             return cmd.help ? cmd.help() : console.log(cmd);
         }
         if (!d) {
-            if (s == 's.txt') {
-                f(s, '/Users/j/dev/jHandy/stocks.json');
+            if (s == 's.txt' && !d) {
+                f(s, '/Users/j/dev/jhandy/stocks.json');
                 console.log(`${s} ok!`);
                 return;
             }
-            if (s == 't.txt') {
-                f(s, '/Users/j/dev/chrome-extension-contextMenuUtils/js/data/T.js');
+            if (s == 't.txt' && !d) {
+                f(s, '/Users/j/dev/crx-jhandy/js/data/T.js');
                 console.log(`${s} ok!`);
                 return;
             }

@@ -17,6 +17,7 @@ function main(stocks, index, source_id){
     console.info(code, name, index);
 
     let dobo = dob(code);
+    let random = ( Math.random() + 0.1 ) *  3000;
 
     fetch.start(code, source_id, function(result, source_id, code){
         dobo.save(result);
@@ -26,7 +27,8 @@ function main(stocks, index, source_id){
 
     setTimeout(function(){
         main(stocks, index, source_id);
-    }, ( Math.random() + 0.1 ) *  3000 )
+    }, random)
+
 }
 
 module.exports = function(source_id, index,  stocks){

@@ -35,9 +35,11 @@ program
         f(s, d);
     });
 
-
+//
 require('./bin/fetch.js')(program);
 
+// 通达信自定义数据输出
+require('./bin/tdx.js')(program);
 
 program
     .command('merge')

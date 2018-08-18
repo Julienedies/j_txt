@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 /**
  * Created by Julien on 2017/4/15.
@@ -9,7 +9,6 @@ const program = require('commander');
 program
     .version('1.0', '-v, --version')
     .usage('<sub-command>');
-
 
 program
     .command('csv2json')
@@ -25,7 +24,7 @@ program
         }
         if (!d) {
             if (s == 's.txt') {
-                return f(s, '/Users/j/dev/jhandy/stocks.json');
+                return f(s, '/Users/j/dev/stock-data/stocks.json');
             }
             if (s == 't.txt') {
                 return f(s, '/Users/j/dev/crx-jhandy/js/data/T.js');
@@ -35,6 +34,9 @@ program
 
         f(s, d);
     });
+
+
+require('./bin/fetch.js')(program);
 
 
 program
@@ -48,7 +50,6 @@ program
 
 
 program.parse(process.argv);
-
 
 if(!program.args.length) {
     program.help();

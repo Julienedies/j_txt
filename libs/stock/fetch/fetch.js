@@ -6,7 +6,7 @@
 const client = require('cheerio-httpcli');
 
 client.set('gzip', true);
-client.set('timeout', 5000);
+client.set('timeout', 7000);
 client.set('headers', {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.34'
 });

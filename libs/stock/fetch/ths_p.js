@@ -3,6 +3,10 @@
  * 同花顺公司资料页面解析 http://basic.10jqka.com.cn/000001/company.html
  */
 
+String.prototype.j_trim = function(){
+    return this.replace(/\s+/img, '');
+};
+
 module.exports = {
     url: function(code){
         return `http://basic.10jqka.com.cn/${code}/company.html`;

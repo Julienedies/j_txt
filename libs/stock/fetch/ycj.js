@@ -14,7 +14,6 @@ module.exports = {
             var s2 = $(this).find('td small').text() || '';
             return s.trim() + '-' + s2.trim();
         }).get().join('  ');
-        console.log(arr);
         return {
             //'news': $('.tab-panel.active').html(),
             '概念y': arr

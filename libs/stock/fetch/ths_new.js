@@ -3,6 +3,10 @@
  * 同花顺动态页面解析 http://basic.10jqka.com.cn/000001/
  */
 
+String.prototype.j_trim = function(){
+    return this.replace(/\s+/img, '');
+};
+
 module.exports = {
     url: function(code){
         return `http://basic.10jqka.com.cn/${code}/`;

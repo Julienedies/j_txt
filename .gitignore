@@ -18,7 +18,7 @@ down/
 
 test.js
 ls.js
-tdx.txt
+*.txt
 
 #其它
 *.log

@@ -21,7 +21,6 @@ module.exports = function(program){
             var _fetch = require('./_fetch.js');
             var sources = cmd.sources;
             var index = cmd.index;
-            console.log(111, sources, index);
             sources = sources ? sources.split(/\s+/img) : fetch.SOURCES;
             sources.map(source_id => {
                 _fetch(source_id, index);

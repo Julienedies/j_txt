@@ -9,10 +9,10 @@ String.prototype.j_format = function(){
     return this.replace(/([{,])(?=".+"\s*[:]\s*)/img, '$1\r\n');
 };
 
-const base_pah = path.join(__dirname, '../../../stock-data/s/');
+const base_path = path.join(__dirname, '../../../stock-data/s/');
 
 function F(code){
-    let file_path = path.join(base_pah, `${code}.json`);
+    let file_path = path.join(base_path, `${code}.json`);
     this.file_path = file_path;
     //
     if(!fs.existsSync(file_path) ){

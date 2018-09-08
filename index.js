@@ -20,7 +20,7 @@ program
         var s = cmd.source;
         var d = cmd.dist;
         if(!s){
-            return cmd.help ? cmd.help() : console.log(cmd);
+            return cmd.help ? cmd.help() : console.error('没有提供csv文件参数.', cmd);
         }
         if (!d) {
             if (s == 's.txt') {

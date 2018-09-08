@@ -12,7 +12,7 @@ module.exports = function(program){
         .option('-s, --stocks [股票数组]', "股票数组:[['000001','平安银行'],['002564','天沃科技']]")
         .action(function (cmd) {
             let _tdx = require('./_tdx.js');
-            _tdx(cmd.dist, cmd.stocks);
+            _tdx();
         });
 
 };

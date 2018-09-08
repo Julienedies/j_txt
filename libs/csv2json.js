@@ -22,7 +22,7 @@ module.exports = function (csv_file, json_file, cols) {
     }
 
     fs.readFile(csv_file, function (err, data) {
-        if (err) return console.erroror(err);
+        if (err) return console.error(err);
         // 字符转码
         data = iconv.decode(data, 'GBK');
         // 获取行并删除冗余行

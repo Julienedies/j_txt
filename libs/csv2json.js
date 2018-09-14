@@ -45,6 +45,10 @@ module.exports = function (csv_file, json_file, cols) {
 
         console.log('rows is ',rows2.length);
 
+        rows.forEach(arr => {
+            arr[1] = arr[1].replace(/\s+/img, '');
+        });
+
         var json_str = JSON.stringify(rows2);
         // 如果写入js文件而不是json文件
         if (json_file.match(/\.js$/)) {

@@ -67,6 +67,8 @@ module.exports = function (prop) {
         main(item, index + 1);
     });
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var dist_file = 'extern_user.txt';
 
     if (!fs.existsSync(dist_file)) {
@@ -77,11 +79,9 @@ module.exports = function (prop) {
 
     fs.open(dist_file, 'a', function (err, fd) {
         if (err) return console.error(err);
-
         items.forEach((prop) => {
             fs.writeSync(fd, fs.readFileSync(`${prop}.txt`, 'utf8'));
         });
-
         fs.close(fd);
     });
 
@@ -91,5 +91,7 @@ module.exports = function (prop) {
         .pipe(iconv.decodeStream('utf8'))
         .pipe(iconv.encodeStream('GBK'))
         .pipe(fs.createWriteStream('/Volumes/C/new_jyplug/T0002/signals/extern_user.txt'));
+
+
 
 };

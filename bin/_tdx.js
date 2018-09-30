@@ -85,4 +85,11 @@ module.exports = function (prop) {
         fs.close(fd);
     });
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    fs.createReadStream(dist_file)
+        .pipe(iconv.decodeStream('utf8'))
+        .pipe(iconv.encodeStream('GBK'))
+        .pipe(fs.createWriteStream('/Volumes/C/new_jyplug/T0002/signals/extern_user.txt'));
+
 };

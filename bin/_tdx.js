@@ -9,7 +9,8 @@ const dob = require('../libs/stock/dob.js');
 
 const stocks = require('../../stock-data/stocks.json');
 
-function main(prop) {
+// 创建单个属性文件
+function main(prop, number) {
 
     var dist_file = `${prop}.txt`;
 
@@ -30,7 +31,7 @@ function main(prop) {
             let data;
             switch (prop) {
                 case '概念':
-                    data = dobo.get('概念').replace(/[，]/img, '  ') + '  ' + dobo.get('行业').replace(/^.+[—]/, '-') + '  ';
+                    data = dobo.get('概念').replace(/[，]/img, '  ') + '  ' + dobo.get('行业').replace(/^.+[—]/, '-') +'-  ' + dobo.get('概念z') + '  ';
                     break;
                 case '概念y':
                     data = dobo.get('概念y').replace(/[-]\d+[%]/img, '  ');
@@ -44,20 +45,44 @@ function main(prop) {
                 default:
                     data = dobo.get(prop) + '  ';
             }
-            let arr2 = [szh, code, data, '0.000'];
+            let arr2 = [szh, code, number, data, '0.000'];
             fs.writeSync(fd, arr2.join('|') + '\r\n');
-            console.info(code, i);
         });
 
         fs.close(fd);
 
     });
+
 }
 
+/**
+ * /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
+ * extern_user.txt
+ */
+module.exports = function (prop) {
 
-module.exports = function (col) {
-    var items = col ? [col] : ['概念', '概念y', '产品', '业务'];
-    items.forEach(item => {
-        main(item);
+    var items = prop ? [prop] : ['概念', '概念y', '产品', '业务', '公司全名', '备注'];
+
+    items.forEach((item, index) => {
+        main(item, index + 1);
     });
+
+    var dist_file = 'extern_user.txt';
+
+    if (!fs.existsSync(dist_file)) {
+        fs.createWriteStream(dist_file);
+    } else {
+        fs.writeFileSync(dist_file, '');
+    }
+
+    fs.open(dist_file, 'a', function (err, fd) {
+        if (err) return console.error(err);
+
+        items.forEach((prop) => {
+            fs.writeSync(fd, fs.readFileSync(`${prop}.txt`, 'utf8'));
+        });
+
+        fs.close(fd);
+    });
+
 };

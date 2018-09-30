@@ -16,7 +16,7 @@ function main(stocks, index, source_id){
 
     console.info(code, name, index);
 
-    let dobo = dob(code);
+    let dobo = dob(code, {"名称": name, "code":code});
     let random = ( Math.random() + 0.1 ) *  3000;
 
     fetch.start(code, source_id, function(result, source_id, code){

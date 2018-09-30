@@ -1,11 +1,23 @@
 #! /usr/bin/env node
 
+const fs = require("fs");
+
+/**
+ * 根据文件名中包含的数字,字母ab, 上中下对文件进行比较,据此排序
+ * @param a {String} file name
+ * @param b {String} file name
+ */
+function x(a, b) {
+    let reg = /(\d+)|[上中下]|[a-b]/img;
+    let ar = a.match(reg);
+    let br = b.match(reg);
+}
+
 module.exports = function () {
 
     console.log('hello, merging txt start.');
 
-    var fs = require("fs"),
-        path = process.cwd();
+    var path = process.cwd();
 
     var dir_name = path.split('/');
     dir_name = dir_name.pop();

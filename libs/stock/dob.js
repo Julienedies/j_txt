@@ -31,7 +31,7 @@ function F(code){
     }
 }
 
-F.prototype.save = function(obj){
+F.prototype.save = F.prototype.set = function(obj){
     Object.assign(this._pool, obj);
     let json = JSON.stringify(this._pool).j_format();
     fs.writeFileSync(this.file_path, json);

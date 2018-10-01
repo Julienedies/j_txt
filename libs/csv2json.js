@@ -1,14 +1,17 @@
 /**
  * Created by j on 18/3/10.
- * @todo 解析csv格式文本文件到json文件
- * @param csv_file String  csv文件名
- * @param json_file String json文件名
- * @param cols Array   要截取的列索引，默认所有列
  */
 
 var fs = require('fs');
 var iconv = require('iconv-lite');
 
+
+/*
+ * @todo 解析csv格式文本文件到json文件
+ * @param csv_file String  csv文件名
+ * @param json_file String json文件名
+ * @param cols Array   要截取的列索引，默认所有列
+ */
 module.exports = function (csv_file, json_file, cols) {
 
     if (!json_file) {

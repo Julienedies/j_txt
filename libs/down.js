@@ -6,14 +6,14 @@
  * @param dir  String  下载存储目录
  */
 
+var fs = require('fs');
+var request = require('request');
+
 module.exports = function(res, dir){
 
     res = res.shift ? res : [res];
     dir = dir || +new Date() + '';
     console.log(res, dir);
-
-    var fs = require('fs');
-    var request = require('request');
 
     var path = process.cwd();
 

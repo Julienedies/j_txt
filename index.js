@@ -10,49 +10,22 @@ program
     .version('1.0', '-v, --version')
     .usage('<sub-command>');
 
-program
-    .command('csv2json')
-    .description('csv文件转为json文件')
-    .option('-s, --source <csv_file>', "csv文件")
-    .option('-d, --dist [json_file]', 'json文件')
-    .action(function (cmd) {
-        var f = require('./libs/csv2json.js');
-        var s = cmd.source;
-        var d = cmd.dist;
-        if(!s){
-            return cmd.help ? cmd.help() : console.error('没有提供csv文件参数.', cmd);
-        }
-        if (!d) {
-            if (s == 's.txt') {
-                return f(s, '/Users/j/dev/stock-data/stocks.json');
-            }
-            if (s == 't.txt') {
-                return f(s, '/Users/j/dev/crx-jhandy/js/data/T.js');
-            }
-            return f(s, s.replace(/\.\w+$/,'.json'));
-        }
+// 根据csv文件输出json文件
+require('./bin/csv2json.js')(program);
 
-        f(s, d);
-    });
-
-//
+// 从网络获取股票数据, 比如同花顺概念资料
 require('./bin/fetch.js')(program);
 
 // 通达信自定义数据输出
 require('./bin/tdx.js')(program);
 
-program
-    .command('merge')
-    .description('合并当前目录序列文本文件到一个文件')
-    .option('-p, --place [p]', "目前无选项，占位符")
-    .action(function(cmd){
-        var f = require('./libs/merge.js');
-        f();
-    });
+// 合并目录里的序列文本文件
+require('./bin/merge.js')(program);
 
-
+// 解析命令行提供的参数
 program.parse(process.argv);
 
+// 无参数, 输出帮助
 if(!program.args.length) {
     program.help();
 }

@@ -4,10 +4,7 @@
 
 const fetch = require('../libs/stock/fetch/fetch.js');
 
-function range(val) {
-    console.log(val);
-    return val.split(/\s+/img);
-}
+const _fetch = require('./_fetch.js');
 
 module.exports = function(program){
 
@@ -18,7 +15,6 @@ module.exports = function(program){
         .option('-i, --index [index]', '股票列表索引位置,主要用于上次爬取数据中断', function(val){return val * 1;})
         .option('-c, --code [stocks.json]', '股票列表文件, 默认全部股票')
         .action(function (cmd) {
-            var _fetch = require('./_fetch.js');
             var sources = cmd.sources;
             var index = cmd.index;
             sources = sources ? sources.split(/\s+/img) : fetch.SOURCES;

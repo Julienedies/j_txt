@@ -9,15 +9,16 @@ const dob = require('../libs/stock/dob.js');
 function main(stocks, index, source_id){
 
     var arr = stocks[index];
-    if(!arr) return console.log('over');
+    if(!arr) return console.log('over', index);
 
     let code = arr[0];
     let name = arr[1];
 
     console.info(code, name, index);
 
-    let dobo = dob(code, {"名称": name, "code":code});
-    let random = ( Math.random() + 0.1 ) *  3000;
+    let dobo = dob(code);
+    dobo.save({"名称": name, "code":code});
+
 
     fetch.start(code, source_id, function(result, source_id, code){
         dobo.save(result);
@@ -27,7 +28,7 @@ function main(stocks, index, source_id){
 
     setTimeout(function(){
         main(stocks, index, source_id);
-    }, random)
+    }, ( Math.random() + 0.1 ) *  3000);
 
 }
 

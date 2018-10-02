@@ -1,6 +1,6 @@
 /**
  * Created by j on 18/8/13.
- * 创建通达信自定义数据txt
+ * 创建通达信自定义数据更新
  */
 
 const fs = require('fs');

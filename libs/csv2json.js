@@ -16,13 +16,17 @@ module.exports = function (csv_file, json_file, cols) {
 
     if (!json_file) {
         json_file = csv_file.split('.').shift() + '.json';
-        cols = [0, 1];
-    } else if (typeof json_file == 'object' && json_file.shift) {
+        cols = [];
+    } else if (Array.isArray(json_file)) {
         cols = json_file;
         json_file = csv_file.split('.').shift() + '.json';
     } else if (typeof json_file == 'string') {
-        cols = cols || [0, 1];
+        cols = cols || [];
     }
+
+    cols = cols.map(v => {
+        return v * 1;
+    });
 
     fs.readFile(csv_file, function (err, data) {
         if (err) return console.error(err);
@@ -30,32 +34,45 @@ module.exports = function (csv_file, json_file, cols) {
         data = iconv.decode(data, 'GBK');
         // 获取行并删除冗余行
         var rows = data.split('\r\n');
-        rows.shift();
-        rows.pop();
-        rows.pop();
+
         // 截取对应的列，默认全列
+        var col_length = 1;
         var rows2 = [];
-        rows.forEach(function (row) {
-            var arr = row.split(/[\t]+/);
+        rows.forEach(function (str) {
+            //var arr = str.split(/[\t]+/);
+            var arr = str.split(/\s+/);
+            console.(arr);
+            col_length = arr.length >= col_length ? arr.length : col_length;
+            rows2.push(arr);
+        });
+
+        var rows3 = [];
+        rows2.forEach(arr => {
+            if(arr.length < col_length) return; // 跳过冗余行
             if (cols.length == 0) {
-                rows2.push(arr);
+                rows3.push(arr);
             } else {
-                rows2.push(arr.filter(function (v, i) {
+                rows3.push(arr.filter(function (v, i) {
                     return cols.indexOf(i) >= 0;
                 }));
             }
         });
 
-        console.log('rows is ',rows2.length);
+        // 删除列标题
+        var th =  rows3.shift();
+        console.log('rows is ',rows3.length, th);
 
-        rows.forEach(arr => {
-            arr[1] = arr[1].replace(/\s+/img, '');
-        });
+        // 删除股票名称中的空白符
+        if(cols.join('') == '01'){
+            rows3.forEach(arr => {
+                arr[1] = arr[1].replace(/\s+/img, '');
+            });
+        }
 
-        var json_str = JSON.stringify(rows2);
+        var json_str = JSON.stringify(rows3);
         // 如果写入js文件而不是json文件
-        if (json_file.match(/\.js$/)) {
-            json_str = 'STOCKS = ' + json_str + ';'
+        if (/\.js$/.test(json_file)) {
+            json_str = `STOCKS = ${json_str} ;`;
         }
 
         // 解析后的数据写入新文件

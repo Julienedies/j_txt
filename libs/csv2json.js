@@ -41,7 +41,7 @@ module.exports = function (csv_file, json_file, cols) {
         rows.forEach(function (str) {
             //var arr = str.split(/[\t]+/);
             var arr = str.split(/\s+/);
-            console.(arr);
+            console.log(arr);
             col_length = arr.length >= col_length ? arr.length : col_length;
             rows2.push(arr);
         });

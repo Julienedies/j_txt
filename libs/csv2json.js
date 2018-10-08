@@ -28,6 +28,11 @@ module.exports = function (csv_file, json_file, cols) {
         return v * 1;
     });
 
+    var split_reg = /\s+/;
+    if(cols.join('') == '01'){
+        split_reg = /[\t]+/;
+    }
+
     fs.readFile(csv_file, function (err, data) {
         if (err) return console.error(err);
         // 字符转码
@@ -39,8 +44,7 @@ module.exports = function (csv_file, json_file, cols) {
         var col_length = 1;
         var rows2 = [];
         rows.forEach(function (str) {
-            //var arr = str.split(/[\t]+/);
-            var arr = str.split(/\s+/);
+            var arr = str.split(split_reg);
             console.log(arr);
             col_length = arr.length >= col_length ? arr.length : col_length;
             rows2.push(arr);

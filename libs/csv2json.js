@@ -24,10 +24,12 @@ module.exports = function (csv_file, json_file, cols) {
         cols = cols || [];
     }
 
+    // 文字类型数字转为数字类型数字
     cols = cols.map(v => {
         return v * 1;
     });
 
+    // 不同的分割正则
     var split_reg = /\s+/;
     if(cols.join('') == '01'){
         split_reg = /[\t]+/;
@@ -45,7 +47,7 @@ module.exports = function (csv_file, json_file, cols) {
         var rows2 = [];
         rows.forEach(function (str) {
             var arr = str.split(split_reg);
-            console.log(arr);
+            //console.log(arr);
             col_length = arr.length >= col_length ? arr.length : col_length;
             rows2.push(arr);
         });
@@ -89,5 +91,6 @@ module.exports = function (csv_file, json_file, cols) {
         });
 
     });
+
 };
 

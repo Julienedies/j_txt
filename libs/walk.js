@@ -5,7 +5,9 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * @param filePath 需要遍历的文件路径
+ * 递归遍历目录
+ * @param filePath
+ * @param callback
  */
 function recurve(filePath, callback) {
 

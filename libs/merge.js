@@ -2,6 +2,8 @@
 
 const fs = require("fs");
 
+const walk = require('../libs/walk.js');
+
 /**
  * 根据文件名中包含的数字,字母ab, 上中下对文件进行比较,据此排序
  * @param a {String} file name
@@ -13,26 +15,30 @@ function x(a, b) {
     let br = b.match(reg);
 }
 
+/**
+ * 从文件名里获取数字序号
+ * @param file_name
+ * @returns {*|Array}
+ */
+function get_d(file_name) {
+    var arr = file_name.match(/\d+/g) || [];
+    if (!arr.length) return;
+    arr.length == 1 && arr.unshift(arr[0]);
+    arr.push(file_name);
+    return arr;
+}
+
 module.exports = function (path) {
 
-    console.log('hello, merging txt start.');
+    console.log(path);
 
     var dir_name = path.split('/');
     dir_name = dir_name.pop();
     console.log(dir_name);
 
-    function get_d(file_name) {
-        //console.log(file_name);
-        var arr = file_name.match(/\d+/g) || [];
-        if (!arr.length) return;
-        arr.length == 1 && arr.unshift(arr[0]);
-        arr.push(file_name);
-        return arr;
-    }
-
     fs.readdir(path, function (err, files) {
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
         var arr = [];
         var item;
@@ -51,31 +57,22 @@ module.exports = function (path) {
             return a[1] * 1 - b[1] * 1;
         });
 
-        //console.log(JSON.stringify(arr));
-        console.dir(arr);
+        console.log(arr);
 
-        var new_txt = dir_name + '(' + arr[0][0] + '-' + arr[arr.length - 1][1] + ').txt';
+        let new_txt = `${dir_name} ( ${arr[0][0]}-${arr[arr.length - 1][1]} ).txt`;
 
-        fs.open(new_txt, "w", function (err, fd) {
-            if (err) {
-                return console.log(err);
-            }
-            fs.close(fd, function () {
-                //console.log('Done');
-            });
-        });
+        // 创建新文本文件, 用于保存合并内容
+        fs.writeFileSync(new_txt, '');
 
         arr.forEach(function (v) {
             var str = fs.readFileSync(v[2]);
             fs.appendFile(new_txt, str, function (err) {
-                if (err)
-                    console.log(err);
+                err && console.error(err);
             });
         });
 
     });
 
 };
-
 
 

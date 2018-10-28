@@ -13,11 +13,9 @@ function x(a, b) {
     let br = b.match(reg);
 }
 
-module.exports = function () {
+module.exports = function (path) {
 
     console.log('hello, merging txt start.');
-
-    var path = process.cwd();
 
     var dir_name = path.split('/');
     dir_name = dir_name.pop();

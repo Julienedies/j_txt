@@ -1,4 +1,4 @@
-J_txt
+cli-jhandy
 =====
 
-基于npm的各种自用命令行工具。
+基于nodeJs的各种自用命令行工具。

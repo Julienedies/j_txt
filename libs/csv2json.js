@@ -30,7 +30,7 @@ module.exports = function (csv_file, json_file, cols) {
     });
 
     // 不同的分割正则
-    var split_reg = /\s+/;
+    var split_reg = /\s{3,}/;  // (1:注意股票名称里包含多余的空格:'新 和 成')
     if(cols.join('') == '01'){
         split_reg = /[\t]+/;
     }
@@ -42,19 +42,20 @@ module.exports = function (csv_file, json_file, cols) {
         // 获取行并删除冗余行
         var rows = data.split('\r\n');
 
+        console.log(rows.length);
+
         // 截取对应的列，默认全列
         var col_length = 1;
         var rows2 = [];
         rows.forEach(function (str) {
             var arr = str.split(split_reg);
-            //console.log(arr);
             col_length = arr.length >= col_length ? arr.length : col_length;
             rows2.push(arr);
         });
 
         var rows3 = [];
         rows2.forEach(arr => {
-            if(arr.length < col_length) return; // 跳过冗余行
+            if(col_length - arr.length > 3 ) return console.log(arr, arr.length, col_length); // 跳过冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
             if (cols.length == 0) {
                 rows3.push(arr);
             } else {

@@ -31,7 +31,7 @@ module.exports = function (csv_file, json_file, cols) {
 
     // 不同的分割正则
     var split_reg = /\s{3,}/;  // (1:注意股票名称里包含多余的空格:'新 和 成')
-    if(cols.join('') == '01'){
+    if(cols.join('') == '01'){  // 主要处理股票列表csv: s.txt, 以退格键进行分割
         split_reg = /[\t]+/;
     }
 
@@ -42,7 +42,7 @@ module.exports = function (csv_file, json_file, cols) {
         // 获取行并删除冗余行
         var rows = data.split('\r\n');
 
-        console.log(rows.length);
+        console.log(`${csv_file}行数是=> `,rows.length);
 
         // 截取对应的列，默认全列
         var col_length = 1;
@@ -55,7 +55,7 @@ module.exports = function (csv_file, json_file, cols) {
 
         var rows3 = [];
         rows2.forEach(arr => {
-            if(col_length - arr.length > 3 ) return console.log(arr, arr.length, col_length); // 跳过冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
+            if(col_length - arr.length > 3 ) return console.log('冗余行 => ', arr); // 处理冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
             if (cols.length == 0) {
                 rows3.push(arr);
             } else {
@@ -67,7 +67,9 @@ module.exports = function (csv_file, json_file, cols) {
 
         // 删除列标题
         var th =  rows3.shift();
-        console.log('rows is ',rows3.length, th);
+        console.log('列标题是=> ', th);
+
+        console.log('有效rows length => ', rows3.length);
 
         // 删除股票名称中的空白符
         if(cols.join('') == '01'){

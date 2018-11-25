@@ -12,14 +12,15 @@ module.exports = {
     },
     parse: function($){
         var $table = $('#concept table.gnContent');
-        var $td = $table.eq(0).find('td');
-        var concept = $td.eq(2).text().replace('概念强弱排名：', '').replace('涉及概念：', '').replace('详情>>','').j_trim();
-        var finance = $td.eq(3).text().replace('财务分析：', '').j_trim();
-        var type = $table.eq(1).find('td').eq(3).text().replace('分类：', '').j_trim();
+        var $gnName = $table.find('tr td.gnName');
+        var $extend_content = $table.find('tr.extend_content');
+        var concept = {};
+        $gnName.each(function(i){
+            let name = $(this).text().j_trim();
+            concept[name] = $extend_content.eq(i).text().j_trim();
+        });
         return {
-            '概念':concept,
-            '财务':finance,
-            '分类':type
+            '概念详情':concept
         };
     }
 };

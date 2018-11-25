@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 String.prototype.j_format = function(){
-    return this.replace(/([{,])(?=".+"\s*[:]\s*)/img, '$1\r\n');
+    return this.replace(/([{,])(?=".+"\s*[:]\s*)/img, '$1\r\n').replace(/([}])$/img, '\r\n$1');
 };
 
 const base_path = path.join(__dirname, '../../../csd/s/');

@@ -37,7 +37,7 @@ module.exports = function(source_id, index,  stocks){
     if(!source_id) return console.log('miss source_id');
 
     index = index || 0;
-    stocks = stocks || require('../../stock-data/stocks.json');
+    stocks = stocks || require('../../csd/stocks.json');
     console.info(`stocks.length is ${stocks.length}`);
 
     main(stocks, index, source_id);

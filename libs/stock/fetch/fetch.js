@@ -28,8 +28,9 @@ function fetch(code, source_id, callback){
 
 module.exports = {
     start: fetch,
-    SOURCES :['ths_new', 'ths_p', 'ycj'],
+    SOURCES :['ths_new', 'ths_p', 'ths_c', 'ycj'],
     THS_NEW: 'ths_new',
     THS_P:'ths_p',
+    THS_C:'ths_c',
     YCJ:'ycj'
 };

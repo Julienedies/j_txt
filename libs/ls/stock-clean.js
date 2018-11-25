@@ -6,7 +6,7 @@
  */
 
 
-var stocks = require('../stock-data/stocks.json');
+var stocks = require('../csd/stocks.json');
 
 const dob = require('./libs/stock/dob.js');
 
@@ -71,7 +71,7 @@ function prop_sort(stocks, index){
 
     //console.info(code, name, index);
 
-    let file_path = path.join(__dirname, `../stock-data/s/${code}.json`);
+    let file_path = path.join(__dirname, `../csd/s/${code}.json`);
 
     let str = fs.readFileSync(file_path, 'utf8');
     let ar = str.split(/[\r][\n]/img);

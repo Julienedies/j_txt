@@ -8,7 +8,7 @@ const iconv = require('iconv-lite');
 
 const dob = require('../libs/stock/dob.js');
 
-const stocks = require('../../stock-data/stocks.json');
+const stocks = require('../../csd/stocks.json');
 
 // 创建单个属性文件
 function main(prop, number) {

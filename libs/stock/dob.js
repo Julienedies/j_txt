@@ -9,7 +9,7 @@ String.prototype.j_format = function(){
     return this.replace(/([{,])(?=".+"\s*[:]\s*)/img, '$1\r\n');
 };
 
-const base_path = path.join(__dirname, '../../../stock-data/s/');
+const base_path = path.join(__dirname, '../../../csd/s/');
 
 function F(code, init_obj){
     let file_path = path.join(base_path, `${code}.json`);

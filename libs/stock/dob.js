@@ -30,9 +30,9 @@ function F(code, init_obj){
     }
 }
 
-F.prototype.save = F.prototype.set = function(obj){
+F.prototype.save = F.prototype.merge = function(obj){
     Object.assign(this._pool, obj);
-    let json = JSON.stringify(this._pool).j_format();
+    let json = JSON.stringify(this._pool, null, '\t');
     fs.writeFileSync(this.file_path, json);
     return json;
 };

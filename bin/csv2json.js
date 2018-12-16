@@ -21,13 +21,16 @@ module.exports = function (program) {
             }
             if (!d) {
                 if (s == 's.txt') {
-                    let distJson =  '/Users/j/dev/csd/stocks.json';
+                    let distJson = '/Users/j/dev/csd/stocks.json';
                     csv2json(s, distJson, [0, 1]);
+                    return;
                 }
                 if (s == 't.txt') {
-                    return csv2json(s, '/Users/j/dev/crx-jhandy/js/data/T.js', [0, 1]);
+                    csv2json(s, '/Users/j/dev/crx-jhandy/js/data/T.js', [0, 1]);
+                    return;
                 }
-                return csv2json(s, s.replace(/\.\w+$/, '.json'), c);
+                csv2json(s, s.replace(/\.\w+$/, '.json'), c);
+                return;
             }
 
             csv2json(s, d, c);

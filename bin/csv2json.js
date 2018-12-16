@@ -21,7 +21,9 @@ module.exports = function (program) {
             }
             if (!d) {
                 if (s == 's.txt') {
-                    return csv2json(s, '/Users/j/dev/csd/stocks.json', [0, 1]);
+                    let distJson =  '/Users/j/dev/csd/stocks.json';
+                    csv2json(s, distJson, [0, 1]);
+                    return console.info(`${distJson}更新完成!`);
                 }
                 if (s == 't.txt') {
                     return csv2json(s, '/Users/j/dev/crx-jhandy/js/data/T.js', [0, 1]);

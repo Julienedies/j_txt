@@ -66,7 +66,7 @@ module.exports = function (csv_file, json_file, cols) {
         });
 
         // 删除列标题
-        var th =  rows3.shift();
+        let th =  rows3.shift();
         console.log('列标题是=> ', th);
 
         console.log('有效rows length => ', rows3.length);
@@ -78,20 +78,15 @@ module.exports = function (csv_file, json_file, cols) {
             });
         }
 
-        var json_str = JSON.stringify(rows3);
+        let json_str = JSON.stringify(rows3);
         // 如果写入js文件而不是json文件
         if (/\.js$/.test(json_file)) {
             json_str = `STOCKS = ${json_str} ;`;
         }
 
         // 解析后的数据写入新文件
-        fs.open(json_file, 'w', function (err, fd) {
-            if (err) return console.error(err);
-            fs.write(fd, json_str, function (err) {
-                if (err) return console.error(err);
-                fs.close(fd);
-            });
-        });
+        fs.writeFileSync(json_file, json_str);
+
 
     });
 

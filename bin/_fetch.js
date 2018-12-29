@@ -8,7 +8,7 @@ const dob = require('../libs/stock/dob.js');
 
 function main(stocks, index, source_id){
 
-    var arr = stocks[index];
+    let arr = stocks[index];
     if(!arr) return console.log('over', index);
 
     let code = arr[0];

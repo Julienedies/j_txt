@@ -16,8 +16,8 @@ function F(code, init_obj){
     this.file_path = file_path;
     //
     if(!fs.existsSync(file_path) ){
-        fs.createWriteStream(file_path);
-        //fs.writeFileSync(file_path, '{}');
+        //fs.createWriteStream(file_path);
+        fs.writeFileSync(file_path, '{ }');
         this._pool = init_obj || {};
     }else{
         try{

@@ -6,40 +6,57 @@ const fetch = require('../libs/stock/fetch/fetch.js');
 
 const dob = require('../libs/stock/dob.js');
 
-function main(stocks, index, source_id){
+function start(stocks, index, sources) {
 
     let arr = stocks[index];
-    if(!arr) return console.log('over', index);
+    if (!arr) return console.log('over', index);
 
     let code = arr[0];
     let name = arr[1];
 
-    console.info(code, name, index);
+    console.info('fetch => ', code, name, index);
 
-    let dobo = dob(code);
-    dobo.save({"名称": name, "code":code});
-
-
-    fetch.start(code, source_id, function(result, source_id, code){
-        dobo.save(result);
+    let promises = sources.map((id, index) => {
+        return fetch(code, id, index * (Math.random() + 0.1) * 3000);
     });
 
-    index += 1;
+    Promise.all(promises)
+        .then(data => {
 
-    setTimeout(function(){
-        main(stocks, index, source_id);
-    }, ( Math.random() + 0.1 ) *  3000);
+            // console.log(typeof data,  data[0]);
+
+            let dobo = dob(code);
+            dobo.extend({"名称": name, "code": code});
+
+            for (let v of data) {
+                dobo.extend(v.result);
+            }
+
+            dobo.save();
+
+            index += 1;
+
+            setTimeout(function () {
+                start(stocks, index, sources);
+            }, (Math.random() + 0.1) * 3000);
+
+        })
+        .catch(err => {
+            throw new Error(err);
+        });
 
 }
 
-module.exports = function(source_id, index,  stocks){
 
-    if(!source_id) return console.log('miss source_id');
+
+
+module.exports = function (stocks, index, sources) {
 
     index = index || 0;
     stocks = stocks || require('../../csd/stocks.json');
+
     console.info(`stocks.length is ${stocks.length}`);
 
-    main(stocks, index, source_id);
+    start(stocks, index, sources);
 
 };

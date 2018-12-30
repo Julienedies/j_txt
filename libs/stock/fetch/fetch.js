@@ -11,26 +11,29 @@ client.set('headers', {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.34'
 });
 
-function fetch(code, source_id, callback){
+function fetch(code, source_id, delay){
 
-    let html = require(`./${source_id}.js`);
+    let source = require(`./${source_id}.js`);
 
-    client.fetch(html.url(code), function (err, $, res, body) {
+    return new Promise( (resolve, reject) => {
 
-        let result = html.parse($);
+        setTimeout( function(){
 
-        callback(result, source_id, code);
+            client.fetch(source.url(code), function (err, $, res, body) {
+
+                let result = source.parse($);
+
+                resolve({result, source_id, code});
+
+            });
+
+        }, delay || 30);
 
     });
 
 }
 
 
-module.exports = {
-    start: fetch,
-    SOURCES :['ths_new', 'ths_p', 'ths_c', 'ycj'],
-    THS_NEW: 'ths_new',
-    THS_P:'ths_p',
-    THS_C:'ths_c',
-    YCJ:'ycj'
-};
+fetch.SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj'];
+
+module.exports = fetch;

@@ -12,9 +12,11 @@ bower_components/
 node_modules/
 
 #临时测试下载
-test/
+test/*
 temp/
 down/
+
+!test/stocks.json
 
 test.js
 ls.js

@@ -6,6 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// 股票数据文件存储地址
 const base_path = path.join(__dirname, '../../../csd/s/');
 
 function F(code, init_obj) {

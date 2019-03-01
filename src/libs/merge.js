@@ -1,15 +1,17 @@
-#! /usr/bin/env node
+/**
+ * Created by Julien on 2017/2/27.
+ */
 
-const fs = require("fs");
+import fs from 'fs'
 
-const walk = require('../libs/walk.js');
+import walk from '../libs/walk.js'
 
 /**
  * 根据文件名中包含的数字,字母ab, 上中下对文件进行比较,据此排序
  * @param a {String} file name
  * @param b {String} file name
  */
-function x(a, b) {
+function x (a, b) {
     let reg = /(\d+)|[上中下]|[a-b]/img;
     let ar = a.match(reg);
     let br = b.match(reg);
@@ -20,19 +22,19 @@ function x(a, b) {
  * @param file_name
  * @returns {*|Array}
  */
-function get_d(file_name) {
-    var arr = file_name.match(/\d+/g) || [];
+function get_d (file_name) {
+    let arr = file_name.match(/\d+/g) || [];
     if (!arr.length) return;
-    arr.length == 1 && arr.unshift(arr[0]);
+    arr.length === 1 && arr.unshift(arr[0]);
     arr.push(file_name);
     return arr;
 }
 
-module.exports = function (path) {
+export default function (path) {
 
     console.log(path);
 
-    var dir_name = path.split('/');
+    let dir_name = path.split('/');
     dir_name = dir_name.pop();
     console.log(dir_name);
 
@@ -40,10 +42,10 @@ module.exports = function (path) {
         if (err) {
             return console.error(err);
         }
-        var arr = [];
-        var item;
+        let arr = [];
+        let item;
 
-        for (var i = 0; i < files.length; i += 1) {
+        for (let i = 0; i < files.length; i += 1) {
             item = files[i];
             if (/\.txt$/i.test(item)) {
                 item = get_d(item);
@@ -59,13 +61,13 @@ module.exports = function (path) {
 
         console.log(arr);
 
-        let new_txt = `${dir_name} ( ${arr[0][0]}-${arr[arr.length - 1][1]} ).txt`;
+        let new_txt = `${ dir_name } ( ${ arr[0][0] }-${ arr[arr.length - 1][1] } ).txt`;
 
         // 创建新文本文件, 用于保存合并内容
         fs.writeFileSync(new_txt, '');
 
         arr.forEach(function (v) {
-            var str = fs.readFileSync(v[2]);
+            let str = fs.readFileSync(v[2]);
             fs.appendFile(new_txt, str, function (err) {
                 err && console.error(err);
             });
@@ -73,6 +75,6 @@ module.exports = function (path) {
 
     });
 
-};
+}
 
 

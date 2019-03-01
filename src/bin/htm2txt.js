@@ -2,11 +2,11 @@
  * Created by j on 18/10/27.
  */
 
-const path = require('path');
+import path from 'path'
 
-const _htm2txt = require('./_htm2txt.js');
+import h2t from '../libs/htm2txt.js'
 
-module.exports = function(program){
+export default function (program) {
 
     program
         .command('h2t')
@@ -19,8 +19,8 @@ module.exports = function(program){
             // 绝对路径 or 相对路径
             p = /^\//img.test(p) ? p : path.join(process.cwd(), p);
 
-            _htm2txt(p, q);
+            h2t(p, q);
 
         });
 
-};
+}

@@ -33,7 +33,7 @@ module.exports = {
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.BannerPlugin({
-            banner: `#! /usr/bin/env node`,
+            banner: `#!/usr/bin/env node`,
             raw: true,
             entryOnly: true
         }),

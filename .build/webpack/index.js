@@ -35,7 +35,8 @@ module.exports = {
         new webpack.BannerPlugin({
             banner: `#!/usr/bin/env node`,
             raw: true,
-            entryOnly: true
+            entryOnly: true,
+            test:/cli.js$/
         }),
     ],
     module: {

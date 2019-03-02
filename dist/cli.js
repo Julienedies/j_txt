@@ -103,32 +103,32 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /* harmony default export */ __webpack_exports__["default"] = (function (program) {
-  program.command('csv').description('csv文件转为json文件, 使用: jhandy -s xx.txt').option('-s, --source <csv_file>', "csv文件").option('-d, --dist [json_file]', 'json文件').option('-c, --cols [cols]', '"0, 1, 3", 指定列, 默认所有列;').action(function (cmd) {
+  program.command('csv').description('csv文件转为json文件, 使用: jhandy -s xx.txt').option('-s, --source <csv_file>', "csv文件").option('-d, --dist [json_file]', 'json文件').option('-c, --cols [cols]', '"0, 1, 3", 指定列, 默认所有列').option('-p, --placeholder [placeholder]', '使用默认占位符').action(function (cmd) {
     var s = cmd.source;
     var d = cmd.dist;
     var c = cmd.cols && cmd.cols.split(/\D+/);
+    var placeholder = cmd.placeholder;
 
     if (!s) {
       return cmd.help ? cmd.help() : console.log('没有提供csv文件参数.', cmd);
     }
 
-    if (!d) {
-      if (s === 's.txt') {
-        var distJson = '/Users/j/dev/shandy/data/csd/stocks.json';
-        Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, distJson, [0, 1]);
+    if (!d && placeholder) {
+      if (s === 'stocks.txt') {
+        Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, '/Users/j/dev/shandy/data/csd/stocks.json', [0, 1], placeholder);
         return;
       }
 
       if (s === 't.txt') {
-        Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, '/Users/j/dev/crx-jhandy/js/data/T.js', [0, 1]);
+        Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, '/Users/j/dev/crx-jhandy/js/data/T.js', [0, 1], placeholder);
         return;
       }
 
-      Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, s.replace(/\.\w+$/, '.json'), c);
+      Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, s.replace(/\.\w+$/, '.json'), c, placeholder);
       return;
     }
 
-    Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, d, c);
+    Object(_libs_csv2json_js__WEBPACK_IMPORTED_MODULE_0__["default"])(s, d, c, placeholder);
   });
 });
 
@@ -313,22 +313,16 @@ __webpack_require__.r(__webpack_exports__);
 /*
  * @todo 解析csv格式文本文件到json文件
  * @param csvFile {String}  csv文件名 必须
- * @param jsonFile  {String} json文件名  可选
- * @param cols  {Array}  要截取的列索引，默认所有列  可选
+ * @param jsonFile  {String} json文件名
+ * @param cols  {Array}  要截取的列索引，默认所有列
+ * @param isCsdStocksJson  {Boolean}  要截取的列索引，默认所有列  可选
  * @returns {Promise<any>}
  */
 
-/* harmony default export */ __webpack_exports__["default"] = (function (csvFile, jsonFile, cols) {
-  if (!jsonFile) {
-    jsonFile = csvFile.split('.').shift() + '.json';
-    cols = [];
-  } else if (Array.isArray(jsonFile)) {
-    cols = jsonFile;
-    jsonFile = csvFile.split('.').shift() + '.json';
-  } else if (typeof jsonFile == 'string') {
-    cols = cols || [];
-  } // 文字类型数字转为数字类型数字
-
+/* harmony default export */ __webpack_exports__["default"] = (function (csvFile, jsonFile, cols, isCsdStocksJson) {
+  jsonFile = jsonFile || csvFile.split('.').shift() + '.json';
+  cols = cols || []; //console.log([].slice.call(arguments))
+  // 文字类型数字转为数字类型数字
 
   cols = cols.map(function (v) {
     return v * 1;
@@ -336,17 +330,15 @@ __webpack_require__.r(__webpack_exports__);
 
   var split_reg = /\s{3,}/; // (1:注意股票名称里包含多余的空格:'新 和 成')
 
-  if (cols.join('') === '01') {
+  if (isCsdStocksJson) {
     // 主要处理股票列表csv: s.txt, 以退格键进行分割
     split_reg = /[\t]+/;
   }
 
   return new Promise(function (resolve, reject) {
     fs__WEBPACK_IMPORTED_MODULE_0___default.a.readFile(csvFile, function (err, data) {
-      if (err) return reject(err); // 字符转码
-
-      data = iconv_lite__WEBPACK_IMPORTED_MODULE_1___default.a.decode(data, 'GBK'); // 获取行并删除冗余行
-
+      if (err) return reject(err);
+      data = iconv_lite__WEBPACK_IMPORTED_MODULE_1___default.a.decode(data, 'GBK');
       var rows = data.split('\r\n');
       console.log("".concat(csvFile, "\u884C\u6570\u662F=> "), rows.length); // 截取对应的列，默认全列
 
@@ -354,12 +346,16 @@ __webpack_require__.r(__webpack_exports__);
       var rows2 = [];
       rows.forEach(function (str) {
         var arr = str.split(split_reg);
-        col_length = arr.length >= col_length ? arr.length : col_length;
+        col_length = arr.length >= col_length ? arr.length : col_length; //console.log(arr.length, arr.join(' '))
+
         rows2.push(arr);
       });
       var rows3 = [];
       rows2.forEach(function (arr) {
-        if (col_length - arr.length > 3) return console.log('冗余行 => ', arr); // 处理冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
+        // 如果某一行的列长度小于其它列长度, 判断为冗余行, 则不加入最终json数据
+        if (col_length - arr.length > 0) {
+          return; //console.log('冗余行 => ',col_length, arr.length, arr.join()); // 处理冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
+        }
 
         if (cols.length === 0) {
           rows3.push(arr);
@@ -374,13 +370,14 @@ __webpack_require__.r(__webpack_exports__);
       console.log('列标题是=> ', th);
       console.log('有效rows length => ', rows3.length); // 删除股票名称中的空白符
 
-      if (cols.join('') === '01') {
+      if (isCsdStocksJson) {
         rows3.forEach(function (arr) {
-          arr[1] = arr[1].replace(/\s+/img, '');
+          //console.log(arr.join(' '))
+          arr[1] = arr[1] ? arr[1].replace(/\s+/img, '') : arr[1];
         });
       }
 
-      var jsonStr = JSON.stringify(rows3); // 如果写入js文件而不是json文件
+      var jsonStr = JSON.stringify(rows3, null, '\t'); // 如果写入js文件而不是json文件
 
       if (/\.js$/.test(jsonFile)) {
         jsonStr = "STOCKS = ".concat(jsonStr, " ;");
@@ -504,7 +501,6 @@ function () {
   function Jo(jsonPath) {
     _classCallCheck(this, Jo);
 
-    console.log(jsonPath);
     jsonPath = path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(__dirname, "".concat(jsonPath));
     this.jsonPath = jsonPath;
 
@@ -736,20 +732,30 @@ __webpack_require__.r(__webpack_exports__);
 
 var SOURCES = ['ths_new', 'ths_p', 'ths_c']; // 暂时移除 'ycj'
 
+var timer;
+var stat = {};
 /**
  *
  * @param stocks
  * @param index
  * @param sources
  * @param csdPath
+ * @param watcher
  */
 
-function start(stocks, index, sources, csdPath) {
+function start(stocks, index, sources, csdPath, watcher) {
   var arr = stocks[index];
   if (!arr) return console.log('over', index);
   var code = arr[0];
   var name = arr[1];
   console.info('fetch => ', code, name, index);
+  stat.index = index;
+  watcher && watcher({
+    name: name,
+    code: code,
+    index: index,
+    progress: index / stocks.length
+  });
   var promises = sources.map(function (id, index) {
     return Object(_fetch__WEBPACK_IMPORTED_MODULE_1__["default"])(code, id, index * (Math.random() + 0.1) * 3000);
   });
@@ -786,8 +792,8 @@ function start(stocks, index, sources, csdPath) {
 
     sjo.save();
     index += 1;
-    setTimeout(function () {
-      start(stocks, index, sources, csdPath);
+    timer = setTimeout(function () {
+      start(stocks, index, sources, csdPath, watcher);
     }, (Math.random() + 0.1) * 3000);
   }).catch(function (err) {
     throw new Error(err);
@@ -796,20 +802,39 @@ function start(stocks, index, sources, csdPath) {
 /**
  *
  * @param csdPath {String}
- * @param stocks {Array} [['300059', '东方财富']]
+ * @param stocks {Array|String} [['300059', '东方财富']]  数组或json文件路径
  * @param index {Number}
  * @param sources {Array}  ['ths_new', 'ths_p', 'ths_c']
+ * @param watcher {Function}
  */
 
 
-function f(csdPath, stocks, index, sources) {
+function f(csdPath, stocks, index, sources, watcher) {
   if (!csdPath) throw new Error('必须提供csd数据存储路径.');
-  stocks = stocks || Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, './stocks.json')).json;
-  index = index || 0;
+
+  if (!stocks) {
+    stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, './stocks.json')).json;
+  }
+
+  if (typeof stocks === 'string') {
+    stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, stocks)).json;
+  }
+
+  index = index * 1;
   sources = sources || SOURCES;
   console.log("stocks.length is ".concat(stocks.length));
-  start(stocks, index, sources, csdPath);
+  start(stocks, index, sources, csdPath, watcher);
+  return function () {
+    clearTimeout(timer);
+    return stat;
+  };
 }
+
+f.stop = function () {
+  console.log('fetch timer =>', timer);
+  clearTimeout(timer);
+  return stat;
+};
 
 f.SOURCES = SOURCES;
 /* harmony default export */ __webpack_exports__["default"] = (f);
@@ -997,6 +1022,7 @@ function createPropFile(prop, number, csdPath, tempFile) {
     var szh = /^6/.test(code) ? 1 : 0;
     var sjo = Object(_jsono__WEBPACK_IMPORTED_MODULE_3__["default"])(path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, "./s/".concat(code, ".json")));
     var data;
+    console.log(arr[0], arr[1]);
 
     switch (prop) {
       case '概念':
@@ -1028,13 +1054,14 @@ function createPropFile(prop, number, csdPath, tempFile) {
   });
 }
 /**
- * @param props
- * @param csdPath
+ *
+ * @param csdPath {String}
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
+ * @param props {String}
  */
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (props, csdPath, tdxFile) {
+/* harmony default export */ __webpack_exports__["default"] = (function (csdPath, tdxFile, props) {
   var absolutePathReg = /^\//;
   if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.');
   var tempFile = tdxFile.split(/[/\\]/).pop();
@@ -1047,7 +1074,7 @@ function createPropFile(prop, number, csdPath, tempFile) {
   if (props.length === 1) return true;
   fs__WEBPACK_IMPORTED_MODULE_0___default.a.createReadStream(tempFile).pipe(iconv_lite__WEBPACK_IMPORTED_MODULE_2___default.a.decodeStream('utf8')).pipe(iconv_lite__WEBPACK_IMPORTED_MODULE_2___default.a.encodeStream('GBK')).pipe(fs__WEBPACK_IMPORTED_MODULE_0___default.a.createWriteStream(tdxFile));
   console.log('****通达信自定义数据更新完成****');
-  return true;
+  return tempFile;
 });
 
 /***/ }),

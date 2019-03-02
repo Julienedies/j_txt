@@ -13,7 +13,7 @@ class Jo {
      * @param jsonPath {String} json file path
      */
     constructor (jsonPath) {
-        console.log(jsonPath)
+
         jsonPath = path.resolve(__dirname, `${ jsonPath }`)
         this.jsonPath = jsonPath
 

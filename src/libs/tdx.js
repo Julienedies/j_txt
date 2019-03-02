@@ -26,9 +26,10 @@ function createPropFile(prop, number, csdPath, tempFile) {
 
     stocks.forEach(function (arr, i) {
         let code = arr[0]
-        let szh = /^6/.test(code) ? 1 : 0;
+        let szh = /^6/.test(code) ? 1 : 0
         let sjo = jo(path.resolve(csdPath, `./s/${code}.json`))
         let data
+        console.log(arr[0], arr[1])
         switch (prop) {
             case '概念':
                 data = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') +'  ' + sjo.get('概念z') + '  '
@@ -54,11 +55,12 @@ function createPropFile(prop, number, csdPath, tempFile) {
 
 
 /**
- * @param props
- * @param csdPath
+ *
+ * @param csdPath {String}
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
+ * @param props {String}
  */
-export default function (props, csdPath, tdxFile) {
+export default function (csdPath, tdxFile, props) {
 
     let absolutePathReg = /^\//
     if(!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.')
@@ -83,6 +85,6 @@ export default function (props, csdPath, tdxFile) {
 
     console.log('****通达信自定义数据更新完成****')
 
-    return true
+    return tempFile
 
 }

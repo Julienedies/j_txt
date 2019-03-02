@@ -1,7 +1,7 @@
 {
-  "name": "jhandy-cli",
+  "name": "jhandy",
   "version": "0.4.2",
-  "description": "命令行文本处理工具.",
+  "description": "命令行工具.",
   "repository": {
     "type": "git",
     "url": "https://github.com/Julienedies/cli-jhandy.git"

@@ -10,11 +10,9 @@ const config = require('./webpack/index')
 const compiler = webpack(config)
 
 const watching = compiler.watch({
-    // watchOptions 示例
     aggregateTimeout: 300,
     poll: undefined
 }, (err, stats) => {
-    // 在这里打印 watch/build 结果...
     logStats('', stats)
 });
 

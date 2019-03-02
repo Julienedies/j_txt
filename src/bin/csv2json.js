@@ -8,10 +8,10 @@ export default function (program) {
 
     program
         .command('csv')
-        .description('csv文件转为json文件, 使用: jhandy -s xx.txt')
+        .description('csv文件转为json文件, Usage: jhandy csv -s xx.txt')
         .option('-s, --source <csv_file>', "csv文件")
         .option('-d, --dist [json_file]', 'json文件')
-        .option('-c, --cols [cols]', '"0, 1, 3", 指定列, 默认所有列')
+        .option('-c, --cols [cols]', '"0, 1, 3", 指定截取的csv列, 默认截取所有列')
         .option('-p, --placeholder [placeholder]', '使用默认占位符')
         .action(function (cmd) {
             let s = cmd.source

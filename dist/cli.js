@@ -103,7 +103,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /* harmony default export */ __webpack_exports__["default"] = (function (program) {
-  program.command('csv').description('csv文件转为json文件, 使用: jhandy -s xx.txt').option('-s, --source <csv_file>', "csv文件").option('-d, --dist [json_file]', 'json文件').option('-c, --cols [cols]', '"0, 1, 3", 指定列, 默认所有列').option('-p, --placeholder [placeholder]', '使用默认占位符').action(function (cmd) {
+  program.command('csv').description('csv文件转为json文件, Usage: jhandy csv -s xx.txt').option('-s, --source <csv_file>', "csv文件").option('-d, --dist [json_file]', 'json文件').option('-c, --cols [cols]', '"0, 1, 3", 指定截取的csv列, 默认截取所有列').option('-p, --placeholder [placeholder]', '使用默认占位符').action(function (cmd) {
     var s = cmd.source;
     var d = cmd.dist;
     var c = cmd.cols && cmd.cols.split(/\D+/);
@@ -149,7 +149,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /* harmony default export */ __webpack_exports__["default"] = (function (program) {
-  program.command('fetch').description('从网络爬取股票数据, example: jhandy fetch -s "ths_new ths_p" -c 300059').option('-s, --sources [source_id]', '要爬取的数据源网页id:ths_new, ths_p, ths_c, ycj, 默认爬取全部数据源').option('-i, --index [index]', '股票列表索引位置,主要用于上次爬取数据中断', function (val) {
+  program.command('fetch').description('从网络爬取股票数据, Usage: jhandy fetch -s "ths_new ths_p" -c 300059').option('-s, --sources [source_id]', '要爬取的数据源网页id:ths_new, ths_p, ths_c, ycj, 默认爬取全部数据源').option('-i, --index [index]', '股票列表索引位置,主要用于上次爬取数据中断', function (val) {
     return val * 1;
   }).option('-c, --code [code]', '个股code').action(function (cmd) {
     var sources = cmd.sources,
@@ -158,7 +158,7 @@ __webpack_require__.r(__webpack_exports__);
     sources = sources ? sources.split(/\s+/img) : _libs_stock_fetch_index_js__WEBPACK_IMPORTED_MODULE_0__["default"].SOURCES;
     var stocks = code ? /^\d{6}$/.test(cmd.code) ? [[code, '']] : undefined : undefined;
     var csdPath = '/Users/j/dev/shandy/data/csd';
-    Object(_libs_stock_fetch_index_js__WEBPACK_IMPORTED_MODULE_0__["default"])(csdPath, stocks, index, sources);
+    Object(_libs_stock_fetch_index_js__WEBPACK_IMPORTED_MODULE_0__["default"])(csdPath, stocks, index, sources, null);
   });
 });
 
@@ -236,12 +236,12 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /* harmony default export */ __webpack_exports__["default"] = (function (program) {
-  program.command('tdx').description('通达信自定义数据输出, example: jhandy tdx;  jhandy tdx -c 业务;').option('-p, --csd-path [csd路径]', 'csd数据存储路径').option('-, --tdx-file [通达信自定义数据文件路径]', '通达信自定义数据文件路径').option('-c, --col [数据项]', "'概念', '概念y', '产品', '业务', 默认['概念', '概念y', '产品', '业务', '全名', '备注']").action(function (cmd) {
-    var col = cmd.col || false;
+  program.command('tdx').description('通达信自定义数据输出, Usage: jhandy tdx;  jhandy tdx -p 业务;').option('-c, --csd-path [csd路径]', 'csd数据存储路径').option('-f, --tdx-file [通达信自定义数据文件路径]', '通达信自定义数据文件路径').option('-p, --prop [数据项]', "'概念', '概念y', '产品', '业务', 默认['概念', '概念y', '产品', '业务', '全名', '备注']").action(function (cmd) {
+    var prop = cmd.prop || false;
     var csdPath = cmd['csd-path'] || '/Users/j/dev/shandy/data/csd';
     var tdxFile = cmd['tdx-file'] || '/Volumes/C/new_jyplug/T0002/signals/extern_user.txt';
     console.log('__dirname => ', __dirname, 'process.cwd() => ', process.cwd());
-    Object(_libs_tdx__WEBPACK_IMPORTED_MODULE_0__["default"])(col, csdPath, tdxFile);
+    Object(_libs_tdx__WEBPACK_IMPORTED_MODULE_0__["default"])(csdPath, tdxFile, prop);
   });
 });
 

@@ -4,7 +4,6 @@ jhandy
 基于nodeJs的各种自用命令行工具。
 
 ### 安装
-主要是自用, 并没有发布到npm
 ```` sh
 git clone https://github.com/julienedies/cli-jhandy.git
 cd cli-jhandy

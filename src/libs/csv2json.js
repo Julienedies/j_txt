@@ -10,7 +10,7 @@ import iconv from 'iconv-lite'
  * @param csvFile {String}  csv文件名 必须
  * @param jsonFile  {String} json文件名
  * @param cols  {Array}  要截取的列索引，默认所有列
- * @param isCsdStocksJson  {Boolean}  要截取的列索引，默认所有列  可选
+ * @param isCsdStocksJson  {Boolean}  要创建的文件是否是stocks.json
  * @returns {Promise<any>}
  */
 export default function (csvFile, jsonFile, cols, isCsdStocksJson) {

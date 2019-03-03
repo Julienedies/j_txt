@@ -11,27 +11,31 @@ const SOURCES = ['ths_new', 'ths_p', 'ths_c']  // 暂时移除 'ycj'
 
 let timer
 let stat = {}
+
 /**
- *
- * @param stocks
- * @param index
- * @param sources
- * @param csdPath
- * @param watcher
+ * @param stocks {Array}
+ * @param index {Number}
+ * @param sources {Array}
+ * @param csdPath {String}
+ * @param watcher {Function}
  */
 function start (stocks, index, sources, csdPath, watcher) {
 
     let arr = stocks[index]
-    if (!arr) return console.log('over', index)
+    if (!arr) {
+        stat = {over: true, index: index}
+        watcher(stat)
+        return console.log(`fetch over, size is ${index}`)
+    }
 
-    let code = arr[0]
-    let name = arr[1]
+    let [code, name] = arr
+    let progress = (index+1) / stocks.length * 100
+    progress = progress.toFixed(2)
+    progress = `${ progress }%`
+    stat = {name, code, index, progress}
+    watcher(stat)
 
-    console.info('fetch => ', code, name, index)
-
-    stat.index = index
-
-    watcher && watcher({name, code, index, progress:index/stocks.length})
+    console.log('fetch => ', code, name, index)
 
     let promises = sources.map((id, index) => {
         return fetch(code, id, index * (Math.random() + 0.1) * 3000)
@@ -40,7 +44,7 @@ function start (stocks, index, sources, csdPath, watcher) {
     Promise.all(promises)
         .then(data => {
 
-            // console.log(typeof data,  data[0]);
+            // console.log(typeof data,  data[0])
 
             let sjo = jo(path.resolve(csdPath, `./s/${ code }.json`))
 
@@ -52,11 +56,9 @@ function start (stocks, index, sources, csdPath, watcher) {
 
             sjo.save()
 
-            index += 1
-
             timer = setTimeout(function () {
 
-                start(stocks, index, sources, csdPath, watcher)
+                start(stocks, index + 1, sources, csdPath, watcher)
 
             }, (Math.random() + 0.1) * 3000)
 
@@ -75,34 +77,38 @@ function start (stocks, index, sources, csdPath, watcher) {
  * @param sources {Array}  ['ths_new', 'ths_p', 'ths_c']
  * @param watcher {Function}
  */
-function f (csdPath, stocks, index, sources, watcher) {
+function f (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
 
     if (!csdPath) throw new Error('必须提供csd数据存储路径.')
 
-    if(!stocks) {
-        stocks = jo(path.resolve(csdPath, './stocks.json')).json
-    }
+    return new Promise((resolve, reject) => {
 
-    if(typeof stocks === 'string') {
-        stocks = jo(path.resolve(csdPath, stocks)).json
-    }
+        if (!stocks) {
+            stocks = jo(path.resolve(csdPath, './stocks.json')).json
+        }
 
-    index = index * 1
-    sources = sources || SOURCES
+        if (typeof stocks === 'string') {
+            stocks = jo(path.resolve(csdPath, stocks)).json
+        }
 
-    console.log(`stocks.length is ${ stocks.length }`)
+        index = index * 1
+        sources = sources || SOURCES
 
-    start(stocks, index, sources, csdPath, watcher)
+        console.log(`stocks.length is ${ stocks.length }`)
 
-    return () => {
-        clearTimeout(timer)
-        return stat
-    }
+        start(stocks, index, sources, csdPath, (stats) => {
+            watcher(stats)
+            if (stats.over) {
+                resolve(stats)
+            }
+        })
+
+    })
 
 }
 
-f.stop = function(){
-    console.log('fetch timer =>', timer)
+f.stop = function () {
+    console.log('clear fetch timer =>', timer)
     clearTimeout(timer)
     return stat
 }

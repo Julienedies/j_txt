@@ -136,7 +136,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param csvFile {String}  csv文件名 必须
  * @param jsonFile  {String} json文件名
  * @param cols  {Array}  要截取的列索引，默认所有列
- * @param isCsdStocksJson  {Boolean}  要截取的列索引，默认所有列  可选
+ * @param isCsdStocksJson  {Boolean}  要创建的文件是否是stocks.json
  * @returns {Promise<any>}
  */
 
@@ -389,6 +389,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fetch */ "./libs/stock/fetch/fetch.js");
 /* harmony import */ var _jsono__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../jsono */ "./libs/jsono.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 /**
  * Created by j on 18/8/18.
  */
@@ -400,32 +408,45 @@ var SOURCES = ['ths_new', 'ths_p', 'ths_c']; // 暂时移除 'ycj'
 var timer;
 var stat = {};
 /**
- *
- * @param stocks
- * @param index
- * @param sources
- * @param csdPath
- * @param watcher
+ * @param stocks {Array}
+ * @param index {Number}
+ * @param sources {Array}
+ * @param csdPath {String}
+ * @param watcher {Function}
  */
 
 function start(stocks, index, sources, csdPath, watcher) {
   var arr = stocks[index];
-  if (!arr) return console.log('over', index);
-  var code = arr[0];
-  var name = arr[1];
-  console.info('fetch => ', code, name, index);
-  stat.index = index;
-  watcher && watcher({
+
+  if (!arr) {
+    stat = {
+      over: true,
+      index: index
+    };
+    watcher(stat);
+    return console.log("fetch over, size is ".concat(index));
+  }
+
+  var _arr2 = _slicedToArray(arr, 2),
+      code = _arr2[0],
+      name = _arr2[1];
+
+  var progress = (index + 1) / stocks.length * 100;
+  progress = progress.toFixed(2);
+  progress = "".concat(progress, "%");
+  stat = {
     name: name,
     code: code,
     index: index,
-    progress: index / stocks.length
-  });
+    progress: progress
+  };
+  watcher(stat);
+  console.log('fetch => ', code, name, index);
   var promises = sources.map(function (id, index) {
     return Object(_fetch__WEBPACK_IMPORTED_MODULE_1__["default"])(code, id, index * (Math.random() + 0.1) * 3000);
   });
   Promise.all(promises).then(function (data) {
-    // console.log(typeof data,  data[0]);
+    // console.log(typeof data,  data[0])
     var sjo = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, "./s/".concat(code, ".json")));
     sjo.merge({
       "名称": name,
@@ -456,9 +477,8 @@ function start(stocks, index, sources, csdPath, watcher) {
     }
 
     sjo.save();
-    index += 1;
     timer = setTimeout(function () {
-      start(stocks, index, sources, csdPath, watcher);
+      start(stocks, index + 1, sources, csdPath, watcher);
     }, (Math.random() + 0.1) * 3000);
   }).catch(function (err) {
     throw new Error(err);
@@ -474,29 +494,35 @@ function start(stocks, index, sources, csdPath, watcher) {
  */
 
 
-function f(csdPath, stocks, index, sources, watcher) {
-  if (!csdPath) throw new Error('必须提供csd数据存储路径.');
-
-  if (!stocks) {
-    stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, './stocks.json')).json;
-  }
-
-  if (typeof stocks === 'string') {
-    stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, stocks)).json;
-  }
-
-  index = index * 1;
-  sources = sources || SOURCES;
-  console.log("stocks.length is ".concat(stocks.length));
-  start(stocks, index, sources, csdPath, watcher);
-  return function () {
-    clearTimeout(timer);
-    return stat;
+function f(csdPath, stocks, index, sources) {
+  var watcher = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function (stats) {
+    return console.log(stats);
   };
+  if (!csdPath) throw new Error('必须提供csd数据存储路径.');
+  return new Promise(function (resolve, reject) {
+    if (!stocks) {
+      stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, './stocks.json')).json;
+    }
+
+    if (typeof stocks === 'string') {
+      stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, stocks)).json;
+    }
+
+    index = index * 1;
+    sources = sources || SOURCES;
+    console.log("stocks.length is ".concat(stocks.length));
+    start(stocks, index, sources, csdPath, function (stats) {
+      watcher(stats);
+
+      if (stats.over) {
+        resolve(stats);
+      }
+    });
+  });
 }
 
 f.stop = function () {
-  console.log('fetch timer =>', timer);
+  console.log('clear fetch timer =>', timer);
   clearTimeout(timer);
   return stat;
 };
@@ -673,44 +699,44 @@ __webpack_require__.r(__webpack_exports__);
 /**
  *
  * @param prop {String}
- * @param number {Number}
+ * @param index {Number}
  * @param csdPath {String} csd文件夹路径
  * @param tempFile {String} 临时使用的通达信自定义数据文件
+ * @param stocks {Array} stocks list
  */
 
-function createPropFile(prop, number, csdPath, tempFile) {
+function createPropFile(prop, index, csdPath, tempFile, stocks) {
   var propFile = path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, "./".concat(prop, ".txt"));
-  var stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_3__["default"])(path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, './stocks.json')).json;
   var result = '';
   stocks.forEach(function (arr, i) {
     var code = arr[0];
     var szh = /^6/.test(code) ? 1 : 0;
     var sjo = Object(_jsono__WEBPACK_IMPORTED_MODULE_3__["default"])(path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, "./s/".concat(code, ".json")));
-    var data;
+    var text = '';
     console.log(arr[0], arr[1]);
 
     switch (prop) {
       case '概念':
-        data = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + sjo.get('概念z') + '  ';
+        text = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + (sjo.get('概念z') || '') + '  ';
         break;
 
       case '概念y':
-        data = sjo.get('概念y').replace(/[-]\d+[%]/img, '  ');
+        text = (sjo.get('概念y') || '').replace(/[-]\d+[%]/img, '  ');
         break;
 
       case '产品':
-        data = sjo.get('产品').replace(/[、]/img, '  ');
+        text = sjo.get('产品').replace(/[、]/img, '  ');
         break;
 
       case '业务':
-        data = sjo.get('业务') + '  ';
+        text = sjo.get('业务') + '  ';
         break;
 
       default:
-        data = sjo.get(prop) + '  ';
+        text = sjo.get(prop) + '  ';
     }
 
-    result += [szh, code, number, data, '0.000'].join('|') + '\r\n';
+    result += [szh, code, index, text, '0.000'].join('|') + '\r\n';
   });
   fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(propFile, result);
   fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(tempFile, result, {
@@ -722,24 +748,32 @@ function createPropFile(prop, number, csdPath, tempFile) {
  *
  * @param csdPath {String}
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
- * @param props {String}
+ * @param props {String|Array}
  */
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (csdPath, tdxFile, props) {
+/* harmony default export */ __webpack_exports__["default"] = (function (csdPath, tdxFile) {
+  var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['概念', '概念y', '产品', '业务', '全名', '备注'];
   var absolutePathReg = /^\//;
   if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.');
-  var tempFile = tdxFile.split(/[/\\]/).pop();
-  tempFile = path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, tempFile);
-  fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(tempFile, '');
-  props = props ? [props] : ['概念', '概念y', '产品', '业务', '全名', '备注'];
-  props.forEach(function (prop, index) {
-    createPropFile(prop, index + 1, csdPath, tempFile);
+  return new Promise(function (resolve, reject) {
+    var stocks = Object(_jsono__WEBPACK_IMPORTED_MODULE_3__["default"])(path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, './stocks.json')).json;
+    var tempFile = path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, tdxFile.split(/[/\\]/).pop());
+    fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(tempFile, '');
+
+    if (typeof props === 'string') {
+      props = [props];
+    }
+
+    props.forEach(function (prop, index) {
+      createPropFile(prop, index + 1, csdPath, tempFile, stocks);
+    }); // 一次性更新所有自定义数据 或者 更新特定字段自定义数据
+
+    if (props.length === 1) return resolve(path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(csdPath, "".concat(props[0], ".txt")));
+    fs__WEBPACK_IMPORTED_MODULE_0___default.a.createReadStream(tempFile).pipe(iconv_lite__WEBPACK_IMPORTED_MODULE_2___default.a.decodeStream('utf8')).pipe(iconv_lite__WEBPACK_IMPORTED_MODULE_2___default.a.encodeStream('GBK')).pipe(fs__WEBPACK_IMPORTED_MODULE_0___default.a.createWriteStream(tdxFile));
+    console.log("****\u6570\u636E\u5199\u5165".concat(tdxFile, ";\u901A\u8FBE\u4FE1\u81EA\u5B9A\u4E49\u6570\u636E\u66F4\u65B0\u5B8C\u6210****"));
+    resolve(tempFile);
   });
-  if (props.length === 1) return true;
-  fs__WEBPACK_IMPORTED_MODULE_0___default.a.createReadStream(tempFile).pipe(iconv_lite__WEBPACK_IMPORTED_MODULE_2___default.a.decodeStream('utf8')).pipe(iconv_lite__WEBPACK_IMPORTED_MODULE_2___default.a.encodeStream('GBK')).pipe(fs__WEBPACK_IMPORTED_MODULE_0___default.a.createWriteStream(tdxFile));
-  console.log('****通达信自定义数据更新完成****');
-  return tempFile;
 });
 
 /***/ }),

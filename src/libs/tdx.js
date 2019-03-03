@@ -12,79 +12,85 @@ import jo from './jsono'
 /**
  *
  * @param prop {String}
- * @param number {Number}
+ * @param index {Number}
  * @param csdPath {String} csd文件夹路径
  * @param tempFile {String} 临时使用的通达信自定义数据文件
+ * @param stocks {Array} stocks list
  */
-function createPropFile(prop, number, csdPath, tempFile) {
+function createPropFile (prop, index, csdPath, tempFile, stocks) {
 
-    let propFile = path.resolve(csdPath, `./${prop}.txt`)
-
-    let stocks = jo(path.resolve(csdPath, './stocks.json')).json
+    let propFile = path.resolve(csdPath, `./${ prop }.txt`)
 
     let result = ''
 
     stocks.forEach(function (arr, i) {
         let code = arr[0]
         let szh = /^6/.test(code) ? 1 : 0
-        let sjo = jo(path.resolve(csdPath, `./s/${code}.json`))
-        let data
+        let sjo = jo(path.resolve(csdPath, `./s/${ code }.json`))
+        let text = ''
         console.log(arr[0], arr[1])
         switch (prop) {
             case '概念':
-                data = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') +'  ' + sjo.get('概念z') + '  '
+                text = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + (sjo.get('概念z')||'') + '  '
                 break;
             case '概念y':
-                data = sjo.get('概念y').replace(/[-]\d+[%]/img, '  ')
+                text = (sjo.get('概念y') || '').replace(/[-]\d+[%]/img, '  ')
                 break;
             case '产品':
-                data = sjo.get('产品').replace(/[、]/img, '  ')
+                text = sjo.get('产品').replace(/[、]/img, '  ')
                 break;
             case '业务':
-                data = sjo.get('业务') + '  '
+                text = sjo.get('业务') + '  '
                 break;
             default:
-                data = sjo.get(prop) + '  '
+                text = sjo.get(prop) + '  '
         }
-        result += [szh, code, number, data, '0.000'].join('|') + '\r\n'
+        result += [szh, code, index, text, '0.000'].join('|') + '\r\n'
     })
 
     fs.writeFileSync(propFile, result)
     fs.writeFileSync(tempFile, result, {encoding: 'utf8', flag: 'a'})
 }
 
-
 /**
  *
  * @param csdPath {String}
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
- * @param props {String}
+ * @param props {String|Array}
  */
-export default function (csdPath, tdxFile, props) {
+export default function (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注']) {
 
     let absolutePathReg = /^\//
-    if(!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.')
+    if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.')
 
-    let tempFile = tdxFile.split(/[/\\]/).pop()
-    tempFile = path.resolve(csdPath, tempFile)
+    return new Promise((resolve, reject) => {
 
-    fs.writeFileSync(tempFile, '')
+        let stocks = jo(path.resolve(csdPath, './stocks.json')).json
 
-    props = props ? [props] : ['概念', '概念y', '产品', '业务', '全名', '备注']
+        let tempFile = path.resolve(csdPath, tdxFile.split(/[/\\]/).pop())
 
-    props.forEach((prop, index) => {
-        createPropFile(prop, index + 1, csdPath, tempFile)
+        fs.writeFileSync(tempFile, '')
+
+        if (typeof props === 'string') {
+            props = [props]
+        }
+
+        props.forEach((prop, index) => {
+            createPropFile(prop, index + 1, csdPath, tempFile, stocks)
+        })
+
+        // 一次性更新所有自定义数据 或者 更新特定字段自定义数据
+        if (props.length === 1) return resolve(path.resolve(csdPath, `${ props[0] }.txt`))
+
+        fs.createReadStream(tempFile)
+            .pipe(iconv.decodeStream('utf8'))
+            .pipe(iconv.encodeStream('GBK'))
+            .pipe(fs.createWriteStream(tdxFile))
+
+        console.log(`****数据写入${tdxFile};通达信自定义数据更新完成****`)
+        
+        resolve(tempFile)
+
     })
-
-    if(props.length === 1) return true
-
-    fs.createReadStream(tempFile)
-        .pipe(iconv.decodeStream('utf8'))
-        .pipe(iconv.encodeStream('GBK'))
-        .pipe(fs.createWriteStream(tdxFile))
-
-    console.log('****通达信自定义数据更新完成****')
-
-    return tempFile
 
 }

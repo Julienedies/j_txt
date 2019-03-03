@@ -1,10 +1,10 @@
 {
   "name": "jhandy",
-  "version": "0.4.3",
-  "description": "命令行工具.",
+  "version": "0.4.4",
+  "description": "自用命令行工具.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Julienedies/cli-jhandy.git"
+    "url": "https://github.com/Julienedies/jhandy-cli.git"
   },
   "main": "./dist/index.js",
   "scripts": {
@@ -22,9 +22,9 @@
     "package.json"
   ],
   "bugs": {
-    "url": "https://github.com/Julienedies/cli-jhandy/issues"
+    "url": "https://github.com/Julienedies/jhandy-cli/issues"
   },
-  "homepage": "https://github.com/Julienedies/cli-jhandy#readme",
+  "homepage": "https://github.com/Julienedies/jhandy-cli#readme",
   "author": "",
   "license": "ISC",
   "dependencies": {

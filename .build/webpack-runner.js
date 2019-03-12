@@ -19,7 +19,7 @@ const watching = compiler.watch({
 function logStats (proc, data) {
     let log = ''
 
-    log += chalk.yellow.bold(` ${ proc } Process ${ new Array((19 - proc.length) + 1).join('-') }`)
+    log += chalk.yellow.bold(` ${ proc } Process ${ new Array((39 - proc.length) + 1).join('-') }`)
     log += '\n\n'
 
     if (typeof data === 'object') {
@@ -33,7 +33,7 @@ function logStats (proc, data) {
         log += `  ${ data }\n`
     }
 
-    log += '\n' + chalk.yellow.bold(` ${ new Array(28 + 1).join('-') }`) + '\n'
+    log += '\n' + chalk.yellow.bold(` ${ new Array(48 + 1).join('-') }`) + '\n'
 
     console.log(log)
 }

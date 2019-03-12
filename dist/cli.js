@@ -767,8 +767,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var SOURCES = ['ths_new', 'ths_p', 'ths_c']; // 暂时移除 'ycj'
 
-var isStop = false;
 var timer;
+var isStop = false;
 var stat = {};
 /**
  * @param stocks {Array}
@@ -857,7 +857,7 @@ function start(stocks, index, sources, csdPath, watcher) {
  */
 
 
-function f(csdPath, stocks, index, sources) {
+function fetchX(csdPath, stocks, index, sources) {
   var watcher = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function (stats) {
     return console.log(stats);
   };
@@ -874,6 +874,7 @@ function f(csdPath, stocks, index, sources) {
     index = index * 1;
     sources = sources || SOURCES;
     console.log("stocks.length is ".concat(stocks.length));
+    isStop = false;
     start(stocks, index, sources, csdPath, function (stats) {
       watcher(stats);
 
@@ -884,15 +885,15 @@ function f(csdPath, stocks, index, sources) {
   });
 }
 
-f.stop = function () {
+fetchX.stop = function () {
   console.log('clear fetch timer =>', timer);
   clearTimeout(timer);
   isStop = true;
   return stat;
 };
 
-f.SOURCES = SOURCES;
-/* harmony default export */ __webpack_exports__["default"] = (f);
+fetchX.SOURCES = SOURCES;
+/* harmony default export */ __webpack_exports__["default"] = (fetchX);
 
 /***/ }),
 

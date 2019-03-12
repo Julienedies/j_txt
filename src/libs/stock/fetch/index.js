@@ -9,8 +9,8 @@ import jo from '../../jsono'
 
 const SOURCES = ['ths_new', 'ths_p', 'ths_c']  // 暂时移除 'ycj'
 
-let isStop = false
 let timer
+let isStop = false
 let stat = {}
 
 /**
@@ -78,7 +78,7 @@ function start (stocks, index, sources, csdPath, watcher) {
  * @param sources {Array}  ['ths_new', 'ths_p', 'ths_c']
  * @param watcher {Function}
  */
-function f (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
+function fetchX (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
 
     if (!csdPath) throw new Error('必须提供csd数据存储路径.')
 
@@ -97,6 +97,8 @@ function f (csdPath, stocks, index, sources, watcher = stats => console.log(stat
 
         console.log(`stocks.length is ${ stocks.length }`)
 
+        isStop = false
+
         start(stocks, index, sources, csdPath, (stats) => {
             watcher(stats)
             if (stats.over) {
@@ -108,13 +110,15 @@ function f (csdPath, stocks, index, sources, watcher = stats => console.log(stat
 
 }
 
-f.stop = function () {
+
+
+fetchX.stop = function () {
     console.log('clear fetch timer =>', timer)
     clearTimeout(timer)
     isStop = true
     return stat
 }
 
-f.SOURCES = SOURCES
+fetchX.SOURCES = SOURCES
 
-export default f
+export default fetchX

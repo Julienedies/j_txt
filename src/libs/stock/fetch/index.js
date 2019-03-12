@@ -9,6 +9,7 @@ import jo from '../../jsono'
 
 const SOURCES = ['ths_new', 'ths_p', 'ths_c']  // 暂时移除 'ycj'
 
+let isStop = false
 let timer
 let stat = {}
 
@@ -58,7 +59,7 @@ function start (stocks, index, sources, csdPath, watcher) {
 
             timer = setTimeout(function () {
 
-                start(stocks, index + 1, sources, csdPath, watcher)
+                !isStop && start(stocks, index + 1, sources, csdPath, watcher)
 
             }, (Math.random() + 0.1) * 3000)
 
@@ -110,6 +111,7 @@ function f (csdPath, stocks, index, sources, watcher = stats => console.log(stat
 f.stop = function () {
     console.log('clear fetch timer =>', timer)
     clearTimeout(timer)
+    isStop = true
     return stat
 }
 

@@ -53,6 +53,4 @@ function fetch(code, sourceId, delay){
 }
 
 
-//fetch.SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj']
-
 export default fetch

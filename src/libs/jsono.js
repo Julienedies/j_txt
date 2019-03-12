@@ -11,16 +11,16 @@ class Jo {
     /**
      *
      * @param jsonPath {String} json file path
+     * @param initData {Object|Array}
      */
-    constructor (jsonPath) {
+    constructor (jsonPath, initData = {}) {
 
         jsonPath = path.resolve(__dirname, `${ jsonPath }`)
         this.jsonPath = jsonPath
 
         if (!fs.existsSync(jsonPath)) {
             //fs.createWriteStream(jsonPath)
-            fs.writeFileSync(jsonPath, '{}')
-            this.json = {}
+            this.json = initData
         } else {
             try {
                 let str = fs.readFileSync(this.jsonPath, 'utf8')
@@ -62,6 +62,6 @@ class Jo {
 export { Jo }
 
 
-export default function (jsonFile) {
-    return new Jo(jsonFile)
+export default function (jsonPath, initData) {
+    return new Jo(jsonPath, initData)
 }

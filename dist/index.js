@@ -248,8 +248,11 @@ function () {
   /**
    *
    * @param jsonPath {String} json file path
+   * @param initData {Object|Array}
    */
   function Jo(jsonPath) {
+    var initData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     _classCallCheck(this, Jo);
 
     jsonPath = path__WEBPACK_IMPORTED_MODULE_1___default.a.resolve(__dirname, "".concat(jsonPath));
@@ -257,8 +260,7 @@ function () {
 
     if (!fs__WEBPACK_IMPORTED_MODULE_0___default.a.existsSync(jsonPath)) {
       //fs.createWriteStream(jsonPath)
-      fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(jsonPath, '{}');
-      this.json = {};
+      this.json = initData;
     } else {
       try {
         var str = fs__WEBPACK_IMPORTED_MODULE_0___default.a.readFileSync(this.jsonPath, 'utf8');
@@ -302,8 +304,8 @@ function () {
 }();
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (jsonFile) {
-  return new Jo(jsonFile);
+/* harmony default export */ __webpack_exports__["default"] = (function (jsonPath, initData) {
+  return new Jo(jsonPath, initData);
 });
 
 /***/ }),
@@ -369,8 +371,7 @@ function fetch(code, sourceId, delay) {
       });
     }, delay || 30);
   });
-} //fetch.SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj']
-
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (fetch);
 
@@ -405,6 +406,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var SOURCES = ['ths_new', 'ths_p', 'ths_c']; // 暂时移除 'ycj'
 
+var isStop = false;
 var timer;
 var stat = {};
 /**
@@ -478,7 +480,7 @@ function start(stocks, index, sources, csdPath, watcher) {
 
     sjo.save();
     timer = setTimeout(function () {
-      start(stocks, index + 1, sources, csdPath, watcher);
+      !isStop && start(stocks, index + 1, sources, csdPath, watcher);
     }, (Math.random() + 0.1) * 3000);
   }).catch(function (err) {
     throw new Error(err);
@@ -524,6 +526,7 @@ function f(csdPath, stocks, index, sources) {
 f.stop = function () {
   console.log('clear fetch timer =>', timer);
   clearTimeout(timer);
+  isStop = true;
   return stat;
 };
 

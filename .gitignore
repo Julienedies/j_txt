@@ -16,7 +16,6 @@ test/*
 temp/
 down/
 
-!test/stocks.json
 
 test.js
 ls.js

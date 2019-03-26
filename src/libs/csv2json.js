@@ -13,7 +13,7 @@ import iconv from 'iconv-lite'
  * @param isCsdStocksJson  {Boolean}  要创建的文件是否是stocks.json
  * @returns {Promise<any>}
  */
-export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
+function _csv (csvFile, jsonFile, cols, isCsdStocksJson) {
 
     jsonFile = jsonFile || csvFile.split('.').shift() + '.json';
     cols = cols || [];
@@ -27,7 +27,7 @@ export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
 
     // 不同的分割正则
     let split_reg = /\s{3,}/;  // (1:注意股票名称里包含多余的空格:'新 和 成')
-    if(isCsdStocksJson){  // 主要处理股票列表csv: s.txt, 以退格键进行分割
+    if (isCsdStocksJson) {  // 主要处理股票列表csv: s.txt, 以退格键进行分割
         split_reg = /[\t]+/;
     }
 
@@ -39,7 +39,7 @@ export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
 
             let rows = data.split('\r\n');
 
-            console.log(`${csvFile}行数是=> `,rows.length);
+            console.log(`${ csvFile }行数是=> `, rows.length);
 
             // 截取对应的列，默认全列
             let col_length = 1;
@@ -54,7 +54,7 @@ export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
             let rows3 = [];
             rows2.forEach(arr => {
                 // 如果某一行的列长度小于其它列长度, 判断为冗余行, 则不加入最终json数据
-                if(col_length - arr.length > 0 ) {
+                if (col_length - arr.length > 0) {
                     return //console.log('冗余行 => ',col_length, arr.length, arr.join()); // 处理冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
                 }
                 if (cols.length === 0) {
@@ -67,13 +67,13 @@ export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
             });
 
             // 删除列标题
-            let th =  rows3.shift();
+            let th = rows3.shift();
             console.log('列标题是=> ', th);
 
             console.log('有效rows length => ', rows3.length);
 
             // 删除股票名称中的空白符
-            if(isCsdStocksJson){
+            if (isCsdStocksJson) {
                 rows3.forEach(arr => {
                     //console.log(arr.join(' '))
                     arr[1] = arr[1] ? arr[1].replace(/\s+/img, '') : arr[1];
@@ -83,12 +83,12 @@ export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
             let jsonStr = JSON.stringify(rows3, null, '\t');
             // 如果写入js文件而不是json文件
             if (/\.js$/.test(jsonFile)) {
-                jsonStr = `STOCKS = ${jsonStr} ;`;
+                jsonStr = `STOCKS = ${ jsonStr } ;`;
             }
 
             // 解析后的数据写入新文件
             fs.writeFileSync(jsonFile, jsonStr);
-            console.log(`数据成功写入${jsonFile}.`);
+            console.log(`数据成功写入${ jsonFile }.`);
 
             // return json object
             resolve(rows3)
@@ -98,3 +98,9 @@ export default function (csvFile, jsonFile, cols, isCsdStocksJson) {
 
 }
 
+export default _csv
+
+// 接收对象参数, 包装_csv
+export function csv ({csvFile, jsonFile, cols, isCsdStocksJson}) {
+    return _csv(csvFile, jsonFile, cols, isCsdStocksJson)
+}

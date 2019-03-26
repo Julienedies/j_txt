@@ -322,11 +322,12 @@ if (!commander__WEBPACK_IMPORTED_MODULE_0___default.a.args.length) {
 /*!**************************!*\
   !*** ./libs/csv2json.js ***!
   \**************************/
-/*! exports provided: default */
+/*! exports provided: default, csv */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "csv", function() { return csv; });
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs */ "fs");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var iconv_lite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! iconv-lite */ "iconv-lite");
@@ -345,7 +346,7 @@ __webpack_require__.r(__webpack_exports__);
  * @returns {Promise<any>}
  */
 
-/* harmony default export */ __webpack_exports__["default"] = (function (csvFile, jsonFile, cols, isCsdStocksJson) {
+function _csv(csvFile, jsonFile, cols, isCsdStocksJson) {
   jsonFile = jsonFile || csvFile.split('.').shift() + '.json';
   cols = cols || []; //console.log([].slice.call(arguments))
   // 文字类型数字转为数字类型数字
@@ -416,7 +417,17 @@ __webpack_require__.r(__webpack_exports__);
       resolve(rows3);
     });
   });
-});
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (_csv); // 接收对象参数, 包装_csv
+
+function csv(_ref) {
+  var csvFile = _ref.csvFile,
+      jsonFile = _ref.jsonFile,
+      cols = _ref.cols,
+      isCsdStocksJson = _ref.isCsdStocksJson;
+  return _csv(csvFile, jsonFile, cols, isCsdStocksJson);
+}
 
 /***/ }),
 
@@ -742,11 +753,12 @@ function fetch(code, sourceId, delay) {
 /*!***********************************!*\
   !*** ./libs/stock/fetch/index.js ***!
   \***********************************/
-/*! exports provided: default */
+/*! exports provided: default, fetch */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetch", function() { return fetch; });
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! path */ "path");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fetch */ "./libs/stock/fetch/fetch.js");
@@ -796,7 +808,7 @@ function start(stocks, index, sources, csdPath, watcher) {
 
   var progress = (index + 1) / stocks.length * 100;
   progress = progress.toFixed(2);
-  progress = "".concat(progress, "%");
+  progress = "".concat(index + 1, "/").concat(stocks.length);
   stat = {
     name: name,
     code: code,
@@ -857,7 +869,7 @@ function start(stocks, index, sources, csdPath, watcher) {
  */
 
 
-function fetchX(csdPath, stocks, index, sources) {
+function _fetch(csdPath, stocks, index, sources) {
   var watcher = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function (stats) {
     return console.log(stats);
   };
@@ -883,17 +895,28 @@ function fetchX(csdPath, stocks, index, sources) {
       }
     });
   });
+} // fetch2用于包装_fetch, 接收对象参数
+
+
+function fetch(_ref) {
+  var csdPath = _ref.csdPath,
+      stocks = _ref.stocks,
+      index = _ref.index,
+      sources = _ref.sources,
+      watcher = _ref.watcher;
+  return _fetch(csdPath, stocks, index, sources, watcher);
 }
 
-fetchX.stop = function () {
+fetch.stop = _fetch.stop = function () {
   console.log('clear fetch timer =>', timer);
   clearTimeout(timer);
   isStop = true;
   return stat;
 };
 
-fetchX.SOURCES = SOURCES;
-/* harmony default export */ __webpack_exports__["default"] = (fetchX);
+fetch.SOURCES = _fetch.SOURCES = SOURCES;
+/* harmony default export */ __webpack_exports__["default"] = (_fetch);
+
 
 /***/ }),
 
@@ -1041,11 +1064,12 @@ module.exports = {
 /*!*********************!*\
   !*** ./libs/tdx.js ***!
   \*********************/
-/*! exports provided: default */
+/*! exports provided: default, tdx */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tdx", function() { return tdx; });
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs */ "fs");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! path */ "path");
@@ -1080,9 +1104,13 @@ function createPropFile(prop, index, csdPath, tempFile, stocks) {
     var text = '';
     console.log(arr[0], arr[1]);
 
+    if (!sjo.json.code) {
+      return console.log("".concat(arr[0], " : ").concat(arr[1], " is {}"));
+    }
+
     switch (prop) {
       case '概念':
-        text = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + (sjo.get('概念z') || '') + '  ';
+        text = (sjo.get('概念') || '').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + (sjo.get('概念z') || '') + '  ';
         break;
 
       case '概念y':
@@ -1117,7 +1145,7 @@ function createPropFile(prop, index, csdPath, tempFile, stocks) {
  */
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (csdPath, tdxFile) {
+function _tdx(csdPath, tdxFile) {
   var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['概念', '概念y', '产品', '业务', '全名', '备注'];
   var absolutePathReg = /^\//;
   if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.');
@@ -1139,7 +1167,16 @@ function createPropFile(prop, index, csdPath, tempFile, stocks) {
     console.log("****\u6570\u636E\u5199\u5165".concat(tdxFile, ";\u901A\u8FBE\u4FE1\u81EA\u5B9A\u4E49\u6570\u636E\u66F4\u65B0\u5B8C\u6210****"));
     resolve(tempFile);
   });
-});
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (_tdx); // tdx用于包装_tdx, 接收对象参数
+
+function tdx(_ref) {
+  var csdPath = _ref.csdPath,
+      tdxFile = _ref.tdxFile,
+      props = _ref.props;
+  return _tdx(csdPath, tdxFile, props);
+}
 
 /***/ }),
 

@@ -4,7 +4,7 @@
 
 import path from 'path'
 
-import fetch from './fetch'
+import fetchX from './fetch'
 import jo from '../../jsono'
 
 const SOURCES = ['ths_new', 'ths_p', 'ths_c']  // 暂时移除 'ycj'
@@ -26,20 +26,20 @@ function start (stocks, index, sources, csdPath, watcher) {
     if (!arr) {
         stat = {over: true, index: index}
         watcher(stat)
-        return console.log(`fetch over, size is ${index}`)
+        return console.log(`fetch over, size is ${ index }`)
     }
 
     let [code, name] = arr
-    let progress = (index+1) / stocks.length * 100
+    let progress = (index + 1) / stocks.length * 100
     progress = progress.toFixed(2)
-    progress = `${ progress }%`
+    progress = `${ (index + 1) }/${ stocks.length }`
     stat = {name, code, index, progress}
     watcher(stat)
 
     console.log('fetch => ', code, name, index)
 
     let promises = sources.map((id, index) => {
-        return fetch(code, id, index * (Math.random() + 0.1) * 3000)
+        return fetchX(code, id, index * (Math.random() + 0.1) * 3000)
     })
 
     Promise.all(promises)
@@ -78,7 +78,7 @@ function start (stocks, index, sources, csdPath, watcher) {
  * @param sources {Array}  ['ths_new', 'ths_p', 'ths_c']
  * @param watcher {Function}
  */
-function fetchX (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
+function _fetch (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
 
     if (!csdPath) throw new Error('必须提供csd数据存储路径.')
 
@@ -110,15 +110,20 @@ function fetchX (csdPath, stocks, index, sources, watcher = stats => console.log
 
 }
 
+// fetch2用于包装_fetch, 接收对象参数
+function fetch ({csdPath, stocks, index, sources, watcher}) {
+    return _fetch(csdPath, stocks, index, sources, watcher)
+}
 
-
-fetchX.stop = function () {
+fetch.stop = _fetch.stop = function () {
     console.log('clear fetch timer =>', timer)
     clearTimeout(timer)
     isStop = true
     return stat
 }
 
-fetchX.SOURCES = SOURCES
+fetch.SOURCES = _fetch.SOURCES = SOURCES
 
-export default fetchX
+export default _fetch
+
+export { fetch }

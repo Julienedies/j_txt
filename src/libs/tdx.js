@@ -29,9 +29,12 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
         let sjo = jo(path.resolve(csdPath, `./s/${ code }.json`))
         let text = ''
         console.log(arr[0], arr[1])
+        if(!sjo.json.code) {
+            return console.log(`${arr[0]} : ${arr[1]} is {}`)
+        }
         switch (prop) {
             case '概念':
-                text = sjo.get('概念').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + (sjo.get('概念z')||'') + '  '
+                text = (sjo.get('概念') || '').replace(/[，]/img, '  ') + '  ' + sjo.get('行业').replace(/^.+[—]/, '-') + '  ' + (sjo.get('概念z')||'') + '  '
                 break;
             case '概念y':
                 text = (sjo.get('概念y') || '').replace(/[-]\d+[%]/img, '  ')
@@ -58,7 +61,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
  * @param props {String|Array}
  */
-export default function (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注']) {
+function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注']) {
 
     let absolutePathReg = /^\//
     if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) throw new Error('必须提供csd数据存储路径和通达信自定义数据文件路径.')
@@ -93,4 +96,11 @@ export default function (csdPath, tdxFile, props = ['概念', '概念y', '产品
 
     })
 
+}
+
+export default _tdx
+
+// tdx用于包装_tdx, 接收对象参数
+export function tdx ({csdPath, tdxFile, props}) {
+    return _tdx(csdPath, tdxFile, props)
 }

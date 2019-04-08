@@ -395,12 +395,14 @@ function _csv(csvFile, jsonFile, cols, isCsdStocksJson) {
 
       var th = rows3.shift();
       console.log('列标题是=> ', th);
-      console.log('有效rows length => ', rows3.length); // 删除股票名称中的空白符
+      console.log('有效rows length => ', rows3.length); // 删除股票名称中的空白符; 替换'Ａ' 为 'A'
 
       if (isCsdStocksJson) {
         rows3.forEach(function (arr) {
           //console.log(arr.join(' '))
-          arr[1] = arr[1] ? arr[1].replace(/\s+/img, '') : arr[1];
+          if (arr[1]) {
+            arr[1] = arr[1].replace(/\s+/img, '').replace('Ａ', 'A');
+          }
         });
       }
 

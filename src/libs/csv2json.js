@@ -54,8 +54,8 @@ function _csv (csvFile, jsonFile, cols, isCsdStocksJson) {
             let rows3 = [];
             rows2.forEach(arr => {
                 // 如果某一行的列长度小于其它列长度, 判断为冗余行, 则不加入最终json数据
-                if (col_length - arr.length > 0) {
-                    return //console.log('冗余行 => ',col_length, arr.length, arr.join()); // 处理冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
+                if (col_length - arr.length > 2) {
+                    return console.log('冗余行 => ',col_length, arr.length, arr.join()); // 处理冗余行 (1:注意股票名称里包含多余的空格:'新 和 成')
                 }
                 if (cols.length === 0) {
                     rows3.push(arr);

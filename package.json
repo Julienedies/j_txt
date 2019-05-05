@@ -1,6 +1,6 @@
 {
   "name": "jhandy",
-  "version": "0.5.11",
+  "version": "0.5.12",
   "description": "自用命令行工具.",
   "repository": {
     "type": "git",
@@ -9,7 +9,6 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node ./.build/webpack-runner.js",
-    "devX": "cross-env NODE_ENV=development webpack --config ./.build/webpack/index.js --watch",
     "pro": "cross-env NODE_ENV=production webpack --config ./.build/webpack/index.js"
   },
   "bin": {

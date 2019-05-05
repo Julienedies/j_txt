@@ -7,7 +7,7 @@ import path from 'path'
 import fetchX from './fetch'
 import jo from '../../jsono'
 
-const SOURCES = ['ths_new', 'ths_p', 'ths_c']  // 暂时移除 'ycj'
+const SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj']
 
 let timer
 let isStop = false

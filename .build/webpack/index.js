@@ -10,7 +10,7 @@ const webpack = require('webpack')
 
 const isPro = process.env.NODE_ENV === 'production'
 
-const {dependencies} = require('../../package.json')
+const {dependencies, version} = require('../../package.json')
 const outputPath = path.resolve(__dirname, '../../dist')
 
 module.exports = {
@@ -32,6 +32,10 @@ module.exports = {
     ],
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.DefinePlugin({
+            'VERSION': `'${ version }'`,
+            'TIMESTAMP': JSON.stringify((new Date).toLocaleString())
+        }),
         new webpack.BannerPlugin({
             banner: `#!/usr/bin/env node`,
             raw: true,

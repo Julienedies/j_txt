@@ -11,7 +11,7 @@ import merge from './bin/merge.js'
 import htm2txt from './bin/htm2txt.js'
 
 program
-    .version('0.4', '-v, --version')
+    .version(VERSION, '-v, --version')
     .usage('<sub-command>')
 
 // 根据csv文件输出json文件

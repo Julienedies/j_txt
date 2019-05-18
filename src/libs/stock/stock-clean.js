@@ -6,14 +6,14 @@
  */
 
 
-var stocks = require('../csd/stocks.json');
+let stocks = require('../csd/stocks.json');
 
 const dob = require('./libs/stock/dob.js');
 
 
 function str_clean(stocks, index){
 
-    var arr = stocks[index];
+    let arr = stocks[index];
     if(!arr) return console.log('over');
 
     let code = arr[0];
@@ -43,7 +43,7 @@ function str_clean(stocks, index){
 // 属性排序
 function prop_sort(stocks, index){
 
-    var map = {
+    let map = {
         "名称":0,
         "code":1,
         "全名":2,
@@ -60,7 +60,7 @@ function prop_sort(stocks, index){
         "链接": 13
     };
 
-    var arr = stocks[index];
+    let arr = stocks[index];
     if(!arr) return console.log('over', index);
 
     let code = arr[0];

@@ -15,23 +15,23 @@ export default function (program) {
         .option('-i, --index <index>', '股票列表索引位置,主要用于上次爬取数据中断', function (val) {
             return val * 1
         })
-        .option('-c, --stocks <stocks>', '*.json 或者 000001,000002')
+        .option('-c, --stocks <stocks>', 'x.json 或者 000001,000002')
         .option('-p, --csd-path <csd-path>', 'csd路径')
         .action(function (cmd) {
-            let {sources, index, stocks, csdPath} = cmd
+            let {sources, index, stocks, csdPath} = cmd;
 
-            csdPath  = csdPath ||  '/Users/j/dev/csd'
-            index = index || 0
-            sources = sources ? sources.split(/\s+/img) : fetch.SOURCES
+            csdPath = csdPath || '/Users/j/dev/csd';
+            index = index || 0;
+            sources = sources ? sources.split(/\s+/img) : fetch.SOURCES;
 
-            if(stocks) {
+            if (stocks) {
                 // 如果stocks是json文件
-                if(/\.json$/.test(stocks)){
+                if (/\.json$/.test(stocks)) {
                     // 绝对路径 或 相对路径
                     stocks = /^\//.test(stocks) ? stocks : path.resolve(process.cwd(), stocks)
                 }
                 // 或者是股票代码
-                else if(stocks.match(/\d{6}/g)){
+                else if (stocks.match(/\d{6}/g)) {
                     stocks = stocks.match(/\d{6}/g)
                     stocks = stocks.map((v, i) => {
                         return [v, '']
@@ -39,8 +39,8 @@ export default function (program) {
                 }
             }
 
-            fetch(csdPath, stocks, index,  sources)
+            fetch(csdPath, stocks, index, sources);
 
-        })
+        });
 
 }

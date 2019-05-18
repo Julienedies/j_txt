@@ -10,9 +10,9 @@ export default function (program) {
 
     program
         .command('h2t')
-        .description('html转为txt.')
-        .option('-p, --path [html文件 | 本地目录 | url地址]', 'html文件 | 本地目录 | url地址, 默认命令行所在目录')
-        .option('-q, --query [jquery选择符]', 'jquery选择符')
+        .description('html转为txt. Usage: jhandy h2t or jhandy h2t -p "https://x.com/y.html" -q body')
+        .option('-p, --path [html文件 | 本地目录 | url地址]', '可选; html文件 | 本地目录 | url地址, 默认命令行所在目录;')
+        .option('-q, --query [jquery选择符]', '可选; jquery选择符;')
         .action(function (cmd) {
             let p = cmd.path || process.cwd();
             let q = cmd.query || '#showcontent';

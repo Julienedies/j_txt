@@ -1,4 +1,5 @@
 /**
+ * 命令行调用接口
  * Created by Julien on 2017/4/15.
  */
 
@@ -10,9 +11,7 @@ import tdx from './bin/tdx.js'
 import merge from './bin/merge.js'
 import htm2txt from './bin/htm2txt.js'
 
-program
-    .version(VERSION, '-v, --version')
-    .usage('<sub-command>')
+program.version(VERSION, '-v, --version').usage('<sub-command>');
 
 // 根据csv文件输出json文件
 csv(program)

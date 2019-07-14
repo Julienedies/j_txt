@@ -22,7 +22,7 @@ export default function (program) {
 
             // console.log(cmd, csdPath, tdxFile, prop, useDefault)
 
-            tdx(csdPath, tdxFile, props.split(/\s+|,/img));
+            tdx(csdPath, tdxFile, props && props.split(/\s+|,/img));
         })
 
 }

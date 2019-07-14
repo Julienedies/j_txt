@@ -74,13 +74,13 @@ function start (stocks, index, sources, csdPath, watcher) {
  *
  * @param csdPath {String}
  * @param stocks {Array|String} [['300059', '东方财富']]  数组或json文件路径
- * @param index {Number}
+ * @param index {Number} 数组索引 或者 stock code,如果是stock code, 则需要先获取code的索引
  * @param sources {Array}  ['ths_new', 'ths_p', 'ths_c']
  * @param watcher {Function}
  */
 function _fetch (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
 
-    if (!csdPath) throw new Error('必须提供csd数据存储路径.')
+    if (!csdPath) throw new Error('必须提供csd数据存储路径.');
 
     return new Promise((resolve, reject) => {
 
@@ -93,6 +93,15 @@ function _fetch (csdPath, stocks, index, sources, watcher = stats => console.log
         }
 
         index = index * 1
+        // 如果提供的是code，先获取code的索引
+        if (/^\d{6}$/.test('' + index)) {
+            for (let i = 0; i < stocks.length; i++) {
+                if (stocks[i][0] * 1 === index) {
+                    index = i;
+                    break;
+                }
+            }
+        }
         sources = sources || SOURCES
 
         console.log(`stocks.length is ${ stocks.length }`)

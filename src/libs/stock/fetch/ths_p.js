@@ -11,11 +11,11 @@ export default {
     },
     parse: function ($) {
         let $td = $('#detail td');
-        let full_name = $td.eq(1).text().replace('公司名称：', '').j_trim();
-        let position = $td.eq(2).text().replace('所属地域：', '').j_trim();
-        let business = $td.eq(4).text().replace('所属行业：', '').j_trim();
-        let industry = $td.eq(7).text().replace('主营业务：', '').j_trim();
-        let product = $td.eq(8).text().replace('产品名称：', '').j_trim();
+        let full_name = $td.eq(1).text().replace('公司名称：', '').jTrimAll();
+        let position = $td.eq(2).text().replace('所属地域：', '').jTrimAll();
+        let business = $td.eq(4).text().replace('所属行业：', '').jTrimAll();
+        let industry = $td.eq(7).text().replace('主营业务：', '').jTrimAll();
+        let product = $td.eq(8).text().replace('产品名称：', '').jTrimAll();
         return {
             '全名': full_name,
             '地域': position,

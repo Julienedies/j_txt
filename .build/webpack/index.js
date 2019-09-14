@@ -7,6 +7,7 @@ console.log(process.env.NODE_ENV)
 
 const path = require('path')
 const webpack = require('webpack')
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 const isPro = process.env.NODE_ENV === 'production'
 
@@ -36,11 +37,26 @@ module.exports = {
             'VERSION': `'${ version }'`,
             'TIMESTAMP': JSON.stringify((new Date).toLocaleString())
         }),
+        new FileManagerPlugin({
+            onEnd: [
+                {
+                    copy: [{source: './dist/*', destination: '../shandy/node_modules/jhandy/dist/'}]
+                },
+            ]
+        }),
         new webpack.BannerPlugin({
-            banner: `#!/usr/bin/env node`,
+            //entryOnly: true,
+            test: /index.js$/,
+            banner: `https://github.com/Julienedies/jhandy-cli.git
+license:ISC
+V${ version }
+${ (new Date).toLocaleString() }`,
+        }),
+        new webpack.BannerPlugin({
             raw: true,
             entryOnly: true,
-            test:/cli.js$/
+            test: /cli.js$/,
+            banner: `#!/usr/bin/env node`,
         }),
     ],
     module: {

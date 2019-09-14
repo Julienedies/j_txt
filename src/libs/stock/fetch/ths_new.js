@@ -15,9 +15,9 @@ export default {
         let concept = $td.eq(2).text()
             .replace('概念强弱排名：', '')
             .replace('涉及概念：', '')
-            .replace('详情>>', '').j_trim();
-        let finance = $td.eq(3).text().replace('财务分析：', '').j_trim();
-        let type = $table.eq(1).find('td').eq(3).text().replace('分类：', '').j_trim();
+            .replace('详情>>', '').jTrimAll();
+        let finance = $td.eq(3).text().replace('财务分析：', '').jTrimAll();
+        let type = $table.eq(1).find('td').eq(3).text().replace('分类：', '').jTrimAll();
         return {
             '概念': concept,
             '财务': finance,

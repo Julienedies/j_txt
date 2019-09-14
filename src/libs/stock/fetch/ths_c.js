@@ -6,20 +6,20 @@
 import './utils.js';
 
 export default {
-    url: function(code){
-        return `http://basic.10jqka.com.cn/${code}/concept.html`;
+    url: function (code) {
+        return `http://basic.10jqka.com.cn/${ code }/concept.html`;
     },
-    parse: function($){
+    parse: function ($) {
         let $table = $('#concept table.gnContent');
         let $gnName = $table.find('tr td.gnName');
         let $extend_content = $table.find('tr.extend_content');
         let concept = {};
-        $gnName.each(function(i){
-            let name = $(this).text().j_trim();
-            concept[name] = $extend_content.eq(i).text().j_trim();
+        $gnName.each(function (i) {
+            let name = $(this).text().jTrimAll();
+            concept[name] = $extend_content.eq(i).text().jTrimAll();
         });
         return {
-            '概念详情':concept
+            '概念详情': concept
         };
     }
 };

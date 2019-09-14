@@ -14,9 +14,11 @@ export default {
             let s2 = $(this).find('td small').text() || '';
             return s.trim() + '-' + s2.trim();
         }).get().join('  ');
+
         return {
+            '概念y': arr,
             //'news': $('.tab-panel.active').html(),
-            '概念y': arr
-        }
+        };
+
     }
 };

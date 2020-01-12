@@ -1,6 +1,6 @@
 {
   "name": "jhandy",
-  "version": "0.5.18",
+  "version": "0.5.19",
   "description": "自用命令行工具.",
   "main": "./dist/index.js",
   "bin": {

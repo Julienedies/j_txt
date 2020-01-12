@@ -22,22 +22,22 @@ let stat = {}
  */
 function start (stocks, index, sources, csdPath, watcher) {
 
-    let arr = stocks[index]
+    let arr = stocks[index];
     if (!arr) {
-        stat = {over: true, index: index}
-        watcher(stat)
-        return console.log(`fetch over, size is ${ index }`)
+        stat = {over: true, index: index};
+        watcher(stat);
+        return console.log(`fetch over, size is ${ index }`);
     }
 
-    let [code, name] = arr
-    let progress = (index + 1) / stocks.length * 100
-    progress = progress.toFixed(2)
-    progress = `${ (index + 1) }/${ stocks.length }`
-    stat = {name, code, index, progress}
-    watcher(stat)
+    let [code, name] = arr;
+    let progress = (index + 1) / stocks.length * 100;
+    progress = progress.toFixed(2);
+    progress = `${ (index + 1) }/${ stocks.length }`;
+    stat = {name, code, index, progress};
+    watcher(stat);
 
     let promises = sources.map((id, index) => {
-        return fetchX(code, id, index * (Math.random() + 0.1) * 3000)
+        return fetchX(code, id, index * (Math.random() + 0.1) * 3000);
     });
 
     Promise.all(promises)
@@ -76,7 +76,7 @@ function start (stocks, index, sources, csdPath, watcher) {
  * @param watcher {Function}
  * @return
  */
-function _fetch (csdPath, stocks, index, sources, watcher = stats => console.log(stats)) {
+function _fetch (csdPath, stocks, index, sources, watcher = (stats, err) => console.log(stats, err)) {
 
     if (!csdPath) throw new Error('必须提供csd数据存储路径.');
 

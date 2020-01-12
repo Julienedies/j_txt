@@ -65,8 +65,9 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
  * @param csdPath {String} csd数据目录
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
  * @param props {String|Array} 默认:['概念', '概念y', '产品', '业务', '全名', '备注', '概念z'] => 对应通达信自定义数据
+ * @param [cb] {Function} 添加自定义数据项的回调函数
  */
-function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注', '概念z']) {
+function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注', '概念z'], cb) {
 
     return new Promise((resolve, reject) => {
 
@@ -93,6 +94,10 @@ function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务
 
         // 只生成特定字段数据, 用于手动更新特定字段自定义数据, 譬如只更新云财经概念
         if (props.length === 1) return resolve(path.resolve(csdPath, `${ props[0] }.txt`));
+
+        if (cb) {
+            cb(tempFile, csdPath, stocks);
+        }
 
         // 一次性更新所有自定义数据
         fs.createReadStream(tempFile)

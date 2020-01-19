@@ -7,7 +7,7 @@ import path from 'path'
 import fetchX from './fetch'
 import jo from '../../jsono'
 
-const SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj']
+const SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj', 'xgb'];
 
 let timer
 let isStop = false

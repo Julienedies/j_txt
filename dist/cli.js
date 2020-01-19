@@ -299,7 +299,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-commander__WEBPACK_IMPORTED_MODULE_0___default.a.version('0.5.18', '-v, --version').usage('<sub-command>'); // 根据csv文件输出json文件
+commander__WEBPACK_IMPORTED_MODULE_0___default.a.version('0.5.20', '-v, --version').usage('<sub-command>'); // 根据csv文件输出json文件
 
 Object(_bin_csv2json_js__WEBPACK_IMPORTED_MODULE_1__["default"])(commander__WEBPACK_IMPORTED_MODULE_0___default.a); // 从网络获取股票数据, 比如同花顺概念资料
 
@@ -700,6 +700,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ths_new_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ths_new.js */ "./libs/stock/fetch/ths_new.js");
 /* harmony import */ var _ths_p_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ths_p.js */ "./libs/stock/fetch/ths_p.js");
 /* harmony import */ var _ycj_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ycj.js */ "./libs/stock/fetch/ycj.js");
+/* harmony import */ var _xgb_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./xgb.js */ "./libs/stock/fetch/xgb.js");
 /**
  * Created by j on 18/8/16.
  * 从网页上获取股票信息
@@ -709,11 +710,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var sourceMap = {
   ths_c: _ths_c_js__WEBPACK_IMPORTED_MODULE_1__["default"],
   ths_new: _ths_new_js__WEBPACK_IMPORTED_MODULE_2__["default"],
   ths_p: _ths_p_js__WEBPACK_IMPORTED_MODULE_3__["default"],
-  ycj: _ycj_js__WEBPACK_IMPORTED_MODULE_4__["default"]
+  ycj: _ycj_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+  xgb: _xgb_js__WEBPACK_IMPORTED_MODULE_5__["default"]
 };
 cheerio_httpcli__WEBPACK_IMPORTED_MODULE_0___default.a.set('gzip', true);
 cheerio_httpcli__WEBPACK_IMPORTED_MODULE_0___default.a.set('timeout', 30000);
@@ -781,7 +784,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj'];
+var SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj', 'xgb'];
 var timer;
 var isStop = false;
 var stat = {};
@@ -1057,6 +1060,40 @@ __webpack_require__.r(__webpack_exports__);
 String.prototype.j_trim = String.prototype.jTrimAll = function () {
   return this.replace(/\s+/img, '');
 };
+
+/***/ }),
+
+/***/ "./libs/stock/fetch/xgb.js":
+/*!*********************************!*\
+  !*** ./libs/stock/fetch/xgb.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * Created by j on 20/1/19.
+ * 选股宝股票页面数据解析
+ * 页面数据是异步加载的，get不到，以后解决；
+ */
+/* harmony default export */ __webpack_exports__["default"] = ({
+  url: function url(code) {
+    code = code + (/^6/.test(code) ? '.SS' : '.SZ');
+    return "https://xuangubao.cn/stock/".concat(code);
+  },
+  parse: function parse($) {
+    var $target = $('.stock-info-bkj .related-subject .related-subject-item .related-subject-item-name');
+    console.log($target.length, $target.text());
+    var arr = $target.map(function () {
+      return $(this).text() || '';
+    }).get().join('  ');
+    return {
+      '概念xgb': arr //'news': $('.tab-panel.active').html(),
+
+    };
+  }
+});
 
 /***/ }),
 

@@ -1,7 +1,7 @@
 {
   "name": "jhandy",
-  "version": "0.5.19",
-  "description": "自用命令行工具.",
+  "version": "0.5.20",
+  "description": "",
   "main": "./dist/index.js",
   "bin": {
     "jhandy": "./dist/cli.js"

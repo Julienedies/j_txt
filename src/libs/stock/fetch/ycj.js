@@ -15,10 +15,13 @@ export default {
             return s.trim() + '-' + s2.trim();
         }).get().join('  ');
 
-        return {
+        let result = {
             '概念y': arr,
             //'news': $('.tab-panel.active').html(),
         };
+
+        console.log(JSON.stringify(result, null, '\t'));
+        return result;
 
     }
 };

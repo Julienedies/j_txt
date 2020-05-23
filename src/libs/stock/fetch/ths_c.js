@@ -3,7 +3,9 @@
  * 同花顺概念页面资料解析: http://basic.10jqka.com.cn/000001/concept.html
  */
 
-import './utils.js';
+import utils from './utils.js';
+
+let {trimAll} = utils;
 
 export default {
     url: function (code) {
@@ -15,11 +17,15 @@ export default {
         let $extend_content = $table.find('tr.extend_content');
         let concept = {};
         $gnName.each(function (i) {
-            let name = $(this).text().jTrimAll();
-            concept[name] = $extend_content.eq(i).text().jTrimAll();
+            let name = trimAll($(this).text());
+            concept[name] = trimAll($extend_content.eq(i).text());
         });
-        return {
+        let result = {
             '概念详情': concept
         };
+
+        console.log(JSON.stringify(result, null, '\t'));
+
+        return result;
     }
 };

@@ -13,7 +13,10 @@ export default {
     },
     parse: function ($) {
         let $table = $('#profile table');
-        let concept = $table.eq(0).find('td').eq(4).text()
+        let $table_0_td = $table.eq(0).find('td');
+
+        let special = $table_0_td.eq(0).text().replace('公司亮点：', '');
+        let concept = $table_0_td.eq(4).text()
             .replace('概念强弱排名：', '')
             .replace('涉及概念：', '')
             .replace('详情>>', '');
@@ -21,6 +24,7 @@ export default {
         let type = $table.eq(1).find('td').eq(3).text().replace('分类：', '');
 
         let result=  {
+            '亮点': trimAll(special),
             '概念': trimAll(concept),
             //'财务': trimAll(finance),
             '分类': trimAll(type)

@@ -21,11 +21,15 @@ export default {
             .replace('涉及概念：', '')
             .replace('详情>>', '');
         //let finance = $td.eq(3).text().replace('财务分析：', '');
+
+        let chinaCompanyListAll = $('#chinaCompanyListAll').text().replace('A股：', '');
+
         let type = $table.eq(1).find('td').eq(3).text().replace('分类：', '');
 
-        let result=  {
+        let result = {
             '亮点': trimAll(special),
             '概念': trimAll(concept),
+            '同业': trimAll(chinaCompanyListAll),
             //'财务': trimAll(finance),
             '分类': trimAll(type)
         };

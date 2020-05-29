@@ -52,7 +52,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
                 text = _get(prop) + '  ';
         }
         result += [szh, code, index, text, '0.000'].join('|') + '\r\n';
-    })
+    });
 
     // 创建单个自定义数据文件
     fs.writeFileSync(propFile, result);
@@ -67,7 +67,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
  * @param props {String|Array} 默认:['概念', '概念y', '产品', '业务', '全名', '备注', '概念z'] => 对应通达信自定义数据
  * @param [cb] {Function} 添加自定义数据项的回调函数
  */
-function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注', '概念z'], cb) {
+function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务', '全名', '备注', '概念z','亮点', '同业'], cb) {
 
     return new Promise((resolve, reject) => {
 

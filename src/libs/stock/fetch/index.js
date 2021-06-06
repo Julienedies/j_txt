@@ -37,7 +37,7 @@ function start (stocks, index, sources, csdPath, watcher) {
     watcher(stat);
 
     let promises = sources.map((id, index) => {
-        return fetchX(code, id, index * (Math.random() + 0.1) * 3000);
+        return fetchX(code, id, index * (Math.random() + 0.1) * 5000);
     });
 
     Promise.all(promises)
@@ -57,7 +57,7 @@ function start (stocks, index, sources, csdPath, watcher) {
 
                 !isStop && start(stocks, index + 1, sources, csdPath, watcher)
 
-            }, (Math.random() + 0.1) * 3000);
+            }, (Math.random() + 0.2) * 5000);
 
         })
         .catch(err => {

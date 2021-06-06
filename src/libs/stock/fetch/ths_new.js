@@ -17,6 +17,7 @@ export default {
 
         let special = $table_0_td.eq(0).text().replace('公司亮点：', '');
         let concept = $table_0_td.eq(4).text()
+            .replace('概念贴合度排名：', '')
             .replace('概念强弱排名：', '')
             .replace('涉及概念：', '')
             .replace('详情>>', '');

@@ -72,11 +72,12 @@ function _tdx (csdPath, tdxFile, props = ['概念', '概念y', '产品', '业务
     return new Promise((resolve, reject) => {
 
         let absolutePathReg = /^\//;
-        if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) {
-            let msg = '必须提供csd数据存储路径和通达信自定义数据文件路径.';
-            console.log(msg);
-            return reject(new Error(msg));
-        }
+        // windows系统绝对路径并不是以/开头
+        // if (!absolutePathReg.test(csdPath) || !absolutePathReg.test(tdxFile)) {
+        //     let msg = '必须提供csd数据存储路径和通达信自定义数据文件路径.';
+        //     console.log(msg);
+        //     return reject(new Error(msg));
+        // }
 
         let stocks = jo(path.resolve(csdPath, './stocks.json')).json;
 

@@ -19,9 +19,13 @@ export default function (code) {
                 return item.name;
             });
             let field = data.field;
-            let obj = {};
+
+            /*let obj = {};
             obj[field] = arr;
-            let result = {'同业': obj};
+            let result = {'同业': obj};*/
+
+            arr = arr.join('  ');
+            let result = {'同业': `${ field }: ${ arr }`};
 
             console.log(JSON.stringify(result, 'null', '\t'));
             resolve({result, source_id: 'ths_a', code});

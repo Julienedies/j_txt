@@ -1,6 +1,6 @@
 {
   "name": "jhandy",
-  "version": "0.5.24",
+  "version": "0.5.26",
   "description": "",
   "main": "./dist/index.js",
   "bin": {
@@ -31,9 +31,11 @@
     "cheerio": "^1.0.0-rc.2",
     "cheerio-httpcli": "^0.7.3",
     "commander": "^2.16.0",
+    "got": "^11.8.2",
     "iconv-lite": "^0.4.24",
     "jsdom": "^11.6.2",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "superagent": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

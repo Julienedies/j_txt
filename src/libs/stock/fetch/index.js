@@ -7,11 +7,14 @@ import path from 'path'
 import fetchX from './fetch'
 import jo from '../../jsono'
 
+import thsA from '../fetch/ths_a'
+
 const SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj', 'xgb'];
 
 let timer
 let isStop = false
 let stat = {}
+
 
 /**
  * @param stocks {Array}
@@ -39,6 +42,10 @@ function start (stocks, index, sources, csdPath, watcher) {
     let promises = sources.map((id, index) => {
         return fetchX(code, id, index * (Math.random() + 0.1) * 5000);
     });
+
+    // 同花顺同业公司 start
+    promises.push(thsA(code));
+    // 同花顺同业公司 end
 
     Promise.all(promises)
         .then(data => {
@@ -82,40 +89,40 @@ function _fetch (csdPath, stocks, index, sources, watcher = (stats, err) => cons
 
     //return new Promise((resolve, reject) => {
 
-        if (!stocks) {
-            stocks = jo(path.resolve(csdPath, './stocks.json')).json;
-        }
+    if (!stocks) {
+        stocks = jo(path.resolve(csdPath, './stocks.json')).json;
+    }
 
-        // 如果提供的参数是json文件路径
-        if (typeof stocks === 'string' && /\.json$/.test(stocks)) {
-            stocks = jo(path.resolve(csdPath, stocks)).json;
-        }
+    // 如果提供的参数是json文件路径
+    if (typeof stocks === 'string' && /\.json$/.test(stocks)) {
+        stocks = jo(path.resolve(csdPath, stocks)).json;
+    }
 
-        index = index * 1
-        // 如果提供的是code，先获取code的索引
-        if (/^\d{6}$/.test('' + index)) {
-            for (let i = 0; i < stocks.length; i++) {
-                if (stocks[i][0] * 1 === index) {
-                    index = i;
-                    break;
-                }
+    index = index * 1
+    // 如果提供的是code，先获取code的索引
+    if (/^\d{6}$/.test('' + index)) {
+        for (let i = 0; i < stocks.length; i++) {
+            if (stocks[i][0] * 1 === index) {
+                index = i;
+                break;
             }
         }
+    }
 
-        sources = sources || SOURCES;
+    sources = sources || SOURCES;
 
-        console.log(`stocks.length is ${ stocks.length }`);
+    console.log(`stocks.length is ${ stocks.length }`);
 
-        isStop = false;
+    isStop = false;
 
-        // -------------------------------------------------------------------------------- start
+    // -------------------------------------------------------------------------------- start
 
-            start(stocks, index, sources, csdPath, (stats) => {
-                watcher(stats)
-            });
+    start(stocks, index, sources, csdPath, (stats) => {
+        watcher(stats)
+    });
 
 
-        // -------------------------------------------------------------------------------- end
+    // -------------------------------------------------------------------------------- end
 
     //});
 

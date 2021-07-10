@@ -33,6 +33,7 @@ export default function (code) {
                 console.log(JSON.stringify(result, 'null', '\t'));
                 resolve({result, source_id: 'ths_a', code});
             } catch (err) {
+                console.log('ths_a catch', err);
                 reject(err);
             }
 

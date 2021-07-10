@@ -16,7 +16,8 @@ export default function (code) {
 
             try {
                 let data = res.body.data;
-                let arr = data.domestic.company_data[0].list;
+                let item = data.domestic.company_data[0] || {list:[ ]};
+                let arr = item.list;
                 arr = arr.map((item, index) => {
                     return item.name;
                 });

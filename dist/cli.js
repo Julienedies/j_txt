@@ -299,7 +299,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-commander__WEBPACK_IMPORTED_MODULE_0___default.a.version('0.5.28', '-v, --version').usage('<sub-command>'); // 根据csv文件输出json文件
+commander__WEBPACK_IMPORTED_MODULE_0___default.a.version('0.5.29', '-v, --version').usage('<sub-command>'); // 根据csv文件输出json文件
 
 Object(_bin_csv2json_js__WEBPACK_IMPORTED_MODULE_1__["default"])(commander__WEBPACK_IMPORTED_MODULE_0___default.a); // 从网络获取股票数据, 比如同花顺概念资料
 
@@ -963,7 +963,7 @@ __webpack_require__.r(__webpack_exports__);
 
       try {
         var data = res.body.data;
-        var item = data.domestic.company_data[0] || {
+        var item = data.domestic && data.domestic.company_data[0] || {
           list: []
         };
         var arr = item.list;

@@ -1,8 +1,8 @@
 /*!
  * https://github.com/Julienedies/jhandy-cli.git
  * license:ISC
- * V0.5.28
- * 2021/7/10下午1:40:03
+ * V0.5.29
+ * 8/7/2021, 7:50:31 PM
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -614,7 +614,7 @@ __webpack_require__.r(__webpack_exports__);
 
       try {
         var data = res.body.data;
-        var item = data.domestic.company_data[0] || {
+        var item = data.domestic && data.domestic.company_data[0] || {
           list: []
         };
         var arr = item.list;

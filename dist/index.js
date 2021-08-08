@@ -1,8 +1,8 @@
 /*!
  * https://github.com/Julienedies/jhandy-cli.git
  * license:ISC
- * V0.5.29
- * 8/7/2021, 7:50:31 PM
+ * V0.5.32
+ * 8/9/2021, 6:47:27 AM
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -613,7 +613,21 @@ __webpack_require__.r(__webpack_exports__);
       if (err) return reject(err);
 
       try {
+        var result = '';
         var data = res.body.data;
+
+        if (data === undefined) {
+          console.log('没有同业数据。', code);
+          result = {
+            '同业': ''
+          };
+          return resolve({
+            result: result,
+            source_id: 'ths_a',
+            code: code
+          });
+        }
+
         var item = data.domestic && data.domestic.company_data[0] || {
           list: []
         };
@@ -627,7 +641,7 @@ __webpack_require__.r(__webpack_exports__);
         let result = {'同业': obj};*/
 
         arr = arr.join('  ');
-        var result = {
+        result = {
           '同业': "".concat(field, ":  ").concat(arr)
         };
         console.log(JSON.stringify(result, 'null', '\t'));

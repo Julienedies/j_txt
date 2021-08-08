@@ -2,7 +2,7 @@
  * https://github.com/Julienedies/jhandy-cli.git
  * license:ISC
  * V0.5.32
- * 8/9/2021, 6:47:27 AM
+ * 8/9/2021, 6:50:42 AM
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -651,6 +651,7 @@ __webpack_require__.r(__webpack_exports__);
           code: code
         });
       } catch (err) {
+        console.log('ths_a catch', err);
         reject(err);
       }
     });
@@ -729,7 +730,7 @@ var trimAll = _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].trimAll;
     var result = {
       '亮点': trimAll(special),
       '概念': trimAll(concept),
-      '同业': trimAll(chinaCompanyListAll),
+      //'同业': trimAll(chinaCompanyListAll),
       //'财务': trimAll(finance),
       '分类': trimAll(type)
     };

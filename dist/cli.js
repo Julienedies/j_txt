@@ -1000,6 +1000,7 @@ __webpack_require__.r(__webpack_exports__);
           code: code
         });
       } catch (err) {
+        console.log('ths_a catch', err);
         reject(err);
       }
     });
@@ -1078,7 +1079,7 @@ var trimAll = _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].trimAll;
     var result = {
       '亮点': trimAll(special),
       '概念': trimAll(concept),
-      '同业': trimAll(chinaCompanyListAll),
+      //'同业': trimAll(chinaCompanyListAll),
       //'财务': trimAll(finance),
       '分类': trimAll(type)
     };

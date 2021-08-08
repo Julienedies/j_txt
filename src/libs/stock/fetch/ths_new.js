@@ -30,7 +30,7 @@ export default {
         let result = {
             '亮点': trimAll(special),
             '概念': trimAll(concept),
-            '同业': trimAll(chinaCompanyListAll),
+            //'同业': trimAll(chinaCompanyListAll),
             //'财务': trimAll(finance),
             '分类': trimAll(type)
         };

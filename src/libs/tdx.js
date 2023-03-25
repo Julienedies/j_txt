@@ -25,7 +25,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
 
     stocks.forEach(function (arr, i) {
         let code = arr[0];
-        let szh = /^6/.test(code) ? 1 : 0;
+        let szh = /^[68]/.test(code) ? 1 : 0;
         let sjo = jo(path.resolve(csdPath, `./s/${ code }.json`));
         let _get = (name) => sjo.get(name) || '';
         let text = '';

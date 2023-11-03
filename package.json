@@ -1,6 +1,6 @@
 {
   "name": "jhandy",
-  "version": "0.5.36",
+  "version": "0.5.38",
   "description": "",
   "main": "./dist/index.js",
   "bin": {

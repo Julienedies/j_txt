@@ -39,7 +39,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
 
         switch (prop) {
             case '概念':
-                text = _get('概念').replace(/[，]/img, '  ') + SPC + _get('行业').replace(/^.+[—]/, '-') + SPC + _get('概念z') + SPC;
+                text = _get('概念').replace(/[，]/img, '  ') + SPC + _get('行业').replace(/^.+[—]/, '-') + SPC;
                 break;
             case '概念y':
                 text = _get('概念y').replace(/[-]\d+[%]/img, SPC);

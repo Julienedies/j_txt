@@ -43,11 +43,16 @@ function fetch (code, sourceId, delay) {
 
         client.fetch(source.url(code), function (err, $, res, body) {
             if (err) return reject(err);
+
             try {
+
                 let result = source.parse($);
                 resolve({result, source_id: sourceId, code});
+
             } catch (e) {
+
                 reject(e);
+
             }
         });
 
@@ -58,4 +63,6 @@ function fetch (code, sourceId, delay) {
 }
 
 
+
+// export
 export default fetch;

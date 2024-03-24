@@ -8,6 +8,7 @@ import fetchX from './fetch'
 import jo from '../../jsono'
 
 import thsA from '../fetch/ths_a'
+import xgb2 from '../fetch/xgb2'
 
 const SOURCES = ['ths_new', 'ths_p', 'ths_c', 'ycj', 'xgb'];
 
@@ -43,10 +44,14 @@ function start (stocks, index, sources, csdPath, watcher) {
         return fetchX(code, id, index * (Math.random() + 0.1) * 5000);
     });
 
-    // 同花顺同业公司 start
+    // 额外插入两个ajax数据获取 promise
+    // 同花顺同业公司 start   ----------------------------
     promises.push(thsA(code));
-    // 同花顺同业公司 end
+    promises.push(xgb2(code));
+    // 同花顺同业公司 end   ------------------------------
 
+
+    // 获取所有数据后合并到json
     Promise.all(promises)
         .then(data => {
 

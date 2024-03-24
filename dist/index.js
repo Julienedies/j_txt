@@ -1,8 +1,8 @@
 /*!
  * https://github.com/Julienedies/jhandy-cli.git
  * license:ISC
- * V0.5.4
- * 2024/3/24下午12:40:18
+ * V0.5.42
+ * 2024/3/24下午1:59:16
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -401,7 +401,8 @@ function fetch(code, sourceId, delay) {
       }
     }); //}, delay || 30);
   });
-}
+} // export
+
 
 /* harmony default export */ __webpack_exports__["default"] = (fetch);
 
@@ -422,6 +423,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fetch */ "./libs/stock/fetch/fetch.js");
 /* harmony import */ var _jsono__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../jsono */ "./libs/jsono.js");
 /* harmony import */ var _fetch_ths_a__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../fetch/ths_a */ "./libs/stock/fetch/ths_a.js");
+/* harmony import */ var _fetch_xgb2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../fetch/xgb2 */ "./libs/stock/fetch/xgb2.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -433,6 +435,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Created by j on 18/8/18.
  */
+
 
 
 
@@ -477,9 +480,12 @@ function start(stocks, index, sources, csdPath, watcher) {
   watcher(stat);
   var promises = sources.map(function (id, index) {
     return Object(_fetch__WEBPACK_IMPORTED_MODULE_1__["default"])(code, id, index * (Math.random() + 0.1) * 5000);
-  }); // 同花顺同业公司 start
+  }); // 额外插入两个ajax数据获取 promise
+  // 同花顺同业公司 start   ----------------------------
 
-  promises.push(Object(_fetch_ths_a__WEBPACK_IMPORTED_MODULE_3__["default"])(code)); // 同花顺同业公司 end
+  promises.push(Object(_fetch_ths_a__WEBPACK_IMPORTED_MODULE_3__["default"])(code));
+  promises.push(Object(_fetch_xgb2__WEBPACK_IMPORTED_MODULE_4__["default"])(code)); // 同花顺同业公司 end   ------------------------------
+  // 获取所有数据后合并到json
 
   Promise.all(promises).then(function (data) {
     var sjo = Object(_jsono__WEBPACK_IMPORTED_MODULE_2__["default"])(path__WEBPACK_IMPORTED_MODULE_0___default.a.resolve(csdPath, "./s/".concat(code, ".json")));
@@ -822,6 +828,7 @@ __webpack_require__.r(__webpack_exports__);
  * Created by j on 20/1/19.
  * 选股宝股票页面数据解析
  * 页面数据是异步加载的，get不到，以后解决；
+ * https://flash-api.xuangubao.cn/api/stage2/plates_by_any_stock?symbol=600973.SS&fields=core_avg_pcp,plate_name
  */
 /* harmony default export */ __webpack_exports__["default"] = ({
   url: function url(code) {
@@ -829,8 +836,9 @@ __webpack_require__.r(__webpack_exports__);
     return "https://xuangubao.cn/stock/".concat(code);
   },
   parse: function parse($) {
-    var $target = $('.stock-info-bkj .related-subject .related-subject-item .related-subject-item-name');
-    console.log($target.length, $target.text());
+    // ajax数据， 获取不到，参考同花顺同业数据获取-> ths_a;
+    var $target = $('.stock-info-bkj .related-subject .related-subject-item-name');
+    console.log('xgb', $target.length, $target.text());
     var arr = $target.map(function () {
       return $(this).text() || '';
     }).get().join('  ');
@@ -839,6 +847,75 @@ __webpack_require__.r(__webpack_exports__);
 
     };
   }
+});
+
+/***/ }),
+
+/***/ "./libs/stock/fetch/xgb2.js":
+/*!**********************************!*\
+  !*** ./libs/stock/fetch/xgb2.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var superagent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! superagent */ "superagent");
+/* harmony import */ var superagent__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(superagent__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Created by j on 24/3/24.
+ * 选股宝概念： https://flash-api.xuangubao.cn/api/stage2/plates_by_any_stock?symbol=600973.SS&fields=core_avg_pcp,plate_name
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = (function (code) {
+  return new Promise(function (resolve, reject) {
+    var code2 = code + (/^6/.test(code) ? '.SS' : '.SZ');
+    var url = "https://flash-api.xuangubao.cn/api/stage2/plates_by_any_stock?symbol=".concat(code2, "&fields=core_avg_pcp,plate_name");
+    superagent__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).accept('json').end(function (err, res) {
+      if (err) return reject(err);
+      var k = '概念xgb';
+      var k2 = '概念x';
+
+      try {
+        var result = {};
+        var data = res.body.data;
+
+        if (data === undefined) {
+          console.log('没有选股宝概念', code);
+          result = {
+            k: ''
+          };
+          return resolve({
+            result: result,
+            source_id: 'xgb2',
+            code: code
+          });
+        }
+
+        var map = {};
+        var arr = [];
+
+        for (var i in data) {
+          var item = data[i];
+          var plate_name = item.plate_name;
+          arr.push(plate_name);
+          map[plate_name] = item.reason;
+        }
+
+        result[k] = map;
+        result[k2] = arr.join('   ');
+        console.log(JSON.stringify(result, 'null', '\t'));
+        resolve({
+          result: result,
+          source_id: 'xgb2',
+          code: code
+        });
+      } catch (err) {
+        console.log('xgb2 catch', err);
+        reject(err);
+      }
+    });
+  });
 });
 
 /***/ }),
@@ -936,6 +1013,10 @@ function createPropFile(prop, index, csdPath, tempFile, stocks) {
     switch (prop) {
       case '概念':
         text = _get('概念').replace(/[，]/img, '  ') + SPC + _get('行业').replace(/^.+[—]/, '-') + SPC;
+        break;
+
+      case '概念x':
+        text = _get('概念x').replace(/[,]/img, SPC);
         break;
 
       case '概念y':

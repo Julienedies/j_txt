@@ -15,8 +15,14 @@ export default function (code) {
             if (err) return reject(err);
 
             try {
+                let result = '';
                 let data = res.body.data;
-                let item = data.domestic.company_data[0] || {list:[ ]};
+                if(data === undefined) {
+                    console.log('没有同业数据。', code);
+                    result = {'同业':''};
+                    return resolve({result, source_id: 'ths_a', code});
+                }
+                let item = (data.domestic && data.domestic.company_data[0]) || {list:[ ]};
                 let arr = item.list;
                 arr = arr.map((item, index) => {
                     return item.name;
@@ -27,8 +33,8 @@ export default function (code) {
                 obj[field] = arr;
                 let result = {'同业': obj};*/
 
-                arr = arr.join('   ');
-                let result = {'同业': `${ field }:   ${ arr }`};
+                arr = arr.join('  ');
+                result = {'同业': `${ field }:  ${ arr }`};
 
                 console.log(JSON.stringify(result, 'null', '\t'));
                 resolve({result, source_id: 'ths_a', code});

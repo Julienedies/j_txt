@@ -17,6 +17,10 @@ temp/
 down/
 
 
+# 生成文件
+#dist/
+
+
 test.js
 ls.js
 *.txt

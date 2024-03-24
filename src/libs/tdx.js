@@ -25,10 +25,12 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
 
     stocks.forEach(function (arr, i) {
         let code = arr[0];
-        let szh = /^6/.test(code) ? 1 : 0;
+        // 通达信自定义数据格式：北证以2标志、上证以1标志、深证以0标志；
+        let szh = /^[6]/.test(code) ? 1 : /^[84]/.test(code) ? 2 : 0;
         let sjo = jo(path.resolve(csdPath, `./s/${ code }.json`));
         let _get = (name) => sjo.get(name) || '';
         let text = '';
+        let SPC = '  ';
 
         console.log(arr[0], arr[1]);
         if (!sjo.json.code) {
@@ -37,19 +39,22 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
 
         switch (prop) {
             case '概念':
-                text = _get('概念').replace(/[，]/img, '  ') + '  ' + _get('行业').replace(/^.+[—]/, '-') + '  ' + _get('概念z') + '  ';
+                text = _get('概念').replace(/[，]/img, '  ') + SPC + _get('行业').replace(/^.+[—]/, '-') + SPC;
                 break;
             case '概念y':
-                text = _get('概念y').replace(/[-]\d+[%]/img, '  ');
+                text = _get('概念y').replace(/[-]\d+[%]/img, SPC);
                 break;
             case '产品':
-                text = _get('产品').replace(/[、]/img, '  ');
+                text = _get('产品').replace(/[、]/img, SPC);
                 break;
             case '业务':
-                text = _get('业务') + '  ';
+                text = _get('业务') + SPC;
+                break;
+            case '概念详情':
+                text = Object.keys(_get('概念详情')).join(SPC);
                 break;
             default:  // 对应 =>  '全名', '备注', '概念z'
-                text = _get(prop) + '  ';
+                text = _get(prop) + SPC;
         }
         result += [szh, code, index, text, '0.000'].join('|') + '\r\n';
     });

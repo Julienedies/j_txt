@@ -27,8 +27,8 @@ export default function (code) {
                 obj[field] = arr;
                 let result = {'同业': obj};*/
 
-                arr = arr.join('  ');
-                let result = {'同业': `${ field }:  ${ arr }`};
+                arr = arr.join('   ');
+                let result = {'同业': `${ field }:   ${ arr }`};
 
                 console.log(JSON.stringify(result, 'null', '\t'));
                 resolve({result, source_id: 'ths_a', code});

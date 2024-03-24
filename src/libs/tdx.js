@@ -33,6 +33,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
         let SPC = '  ';
 
         console.log(arr[0], arr[1]);
+
         if (!sjo.json.code) {
             return console.log(`${ arr[0] } : ${ arr[1] } is {}`);
         }
@@ -42,7 +43,7 @@ function createPropFile (prop, index, csdPath, tempFile, stocks) {
                 text = _get('概念').replace(/[，]/img, '  ') + SPC + _get('行业').replace(/^.+[—]/, '-') + SPC;
                 break;
             case '概念x':
-                text = _get('概念x').replace(/[,]/img, SPC);
+                text = _get('概念x') || '-';
                 break;
             case '概念y':
                 text = _get('概念y').replace(/[-]\d+[%]/img, SPC);

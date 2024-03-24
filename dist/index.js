@@ -1,8 +1,8 @@
 /*!
  * https://github.com/Julienedies/jhandy-cli.git
  * license:ISC
- * V0.5.42
- * 2024/3/24下午1:59:16
+ * V0.5.43
+ * 2024/3/24下午3:07:07
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -827,7 +827,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Created by j on 20/1/19.
  * 选股宝股票页面数据解析
- * 页面数据是异步加载的，get不到，以后解决；
+ * 页面数据是异步加载的，get不到，,xgb2已经解决；
  * https://flash-api.xuangubao.cn/api/stage2/plates_by_any_stock?symbol=600973.SS&fields=core_avg_pcp,plate_name
  */
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -873,8 +873,8 @@ __webpack_require__.r(__webpack_exports__);
     var url = "https://flash-api.xuangubao.cn/api/stage2/plates_by_any_stock?symbol=".concat(code2, "&fields=core_avg_pcp,plate_name");
     superagent__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).accept('json').end(function (err, res) {
       if (err) return reject(err);
-      var k = '概念xgb';
-      var k2 = '概念x';
+      var k = '概念x';
+      var k2 = '概念xgb';
 
       try {
         var result = {};
@@ -882,9 +882,6 @@ __webpack_require__.r(__webpack_exports__);
 
         if (data === undefined) {
           console.log('没有选股宝概念', code);
-          result = {
-            k: ''
-          };
           return resolve({
             result: result,
             source_id: 'xgb2',
@@ -902,8 +899,8 @@ __webpack_require__.r(__webpack_exports__);
           map[plate_name] = item.reason;
         }
 
-        result[k] = map;
-        result[k2] = arr.join('   ');
+        result[k] = arr.join('   ');
+        result[k2] = map;
         console.log(JSON.stringify(result, 'null', '\t'));
         resolve({
           result: result,
@@ -1016,7 +1013,7 @@ function createPropFile(prop, index, csdPath, tempFile, stocks) {
         break;
 
       case '概念x':
-        text = _get('概念x').replace(/[,]/img, SPC);
+        text = _get('概念x') || '-';
         break;
 
       case '概念y':
@@ -1054,13 +1051,13 @@ function createPropFile(prop, index, csdPath, tempFile, stocks) {
  * 根据csd数据创建通达信自定义数据文件
  * @param csdPath {String} csd数据目录
  * @param tdxFile {String} default: /Volumes/C/new_jyplug/T0002/signals/extern_user.txt
- * @param props {String|Array} 默认:['概念', '概念y', '产品', '业务', '全名', '备注', '概念z'] => 对应通达信自定义数据
+ * @param props {String|Array} 默认:['概念', '概念y', '产品', '业务', '全名', '备注', '概念z', '亮点', '同业', '概念x'] => 对应通达信自定义数据
  * @param [cb] {Function} 添加自定义数据项的回调函数
  */
 
 
 function _tdx(csdPath, tdxFile) {
-  var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['概念', '概念y', '产品', '业务', '全名', '备注', '概念z', '亮点', '同业'];
+  var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['概念', '概念y', '产品', '业务', '全名', '备注', '概念z', '亮点', '同业', '概念x'];
   var cb = arguments.length > 3 ? arguments[3] : undefined;
   return new Promise(function (resolve, reject) {
     var absolutePathReg = /^\//; // windows系统绝对路径并不是以/开头
